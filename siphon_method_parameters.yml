@@ -1,0 +1,31 @@
+---
+- name: Siphon Method Parameters into an object
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - interval: 600
+
+  gather_facts: False
+  roles:
+  - manageiq_automate
+
+  tasks:
+    - name: "Get the list of Method Parameters"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_method_parameters: yes
+      register: method_params
+
+    - name: "Set attributes"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attributes:
+          object: "{{ object }}"
+          attributes: "{{ method_params.value }}"
+    
+    - name: Set Retry
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_retry:
+          interval: "{{ interval }}"
