@@ -8,7 +8,7 @@
 
   gather_facts: False
   roles:
-  - manageiq_automate
+  - syncrou.manageiq_automate
 
   tasks:
     - name: "Get the list of Method Parameters"
