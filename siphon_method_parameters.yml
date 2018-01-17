@@ -5,8 +5,6 @@
   vars:
   - object: root
   - interval: 600
-  - manageiq_connection:
-      manageiq_validate_certs: false
 
   gather_facts: False
   roles:
