@@ -6,7 +6,7 @@
   - object: root
   - interval: 600
   - manageiq_connection:
-      validate_certs: false
+      manageiq_validate_certs: false
 
   gather_facts: False
   roles:
