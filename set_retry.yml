@@ -1,0 +1,19 @@
+---
+- name: Set retry interval
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - interval: 300
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+
+    - name: Set Retry
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_retry:
+          interval: "{{ interval }}"
