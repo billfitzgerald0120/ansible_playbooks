@@ -1,0 +1,23 @@
+---
+- name: Set retry interval
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - interval: 300
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+
+    - name: "Get miq_request object reference"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_attribute:
+
+          object: "root"
+          attribute: "miq_request"
+
+        register: miq_request
