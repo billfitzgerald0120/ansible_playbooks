@@ -1,0 +1,132 @@
+---
+- name: Modify the Automate Workspace
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - interval: 600
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Check an attribute"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        attribute_exists:
+          object: "/ManageIQ/System/Request/call_instance"
+          attribute: "::miq::parent"
+
+    - name: "Get an attribute"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_attribute: object: "/ManageIQ/System/Request/call_instance"
+          attribute: "::miq::parent"
+
+    - name: "Check a state_var"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        state_var_exists:
+          attribute: "task_id"
+
+    - name: "Get a state_var"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_state_var:
+          attribute: "task_id"
+
+    - name: "Set a State Var"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_state_var:
+          attribute: "job_id"
+          value: "xyz"
+      register: workspace
+
+    - name: "Check a Method Parameter"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        method_parameter_exists:
+          parameter: "task_id"
+
+    - name: "Get a Method Parameter"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_method_parameter:
+          parameter: "invoice"
+
+    - name: "Get the full list of Objects"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_names: yes
+
+    - name: "Get the list of Method Parameters"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_method_parameters: yes
+      register: method_params
+
+    - name: "Get the list of State Vars"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_state_var_names: yes
+
+    - name: "Get the full list of Object Attribute Names"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_attribute_names:
+          object: "root"
+
+    - name: "Set an attribute"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attribute:
+          object: "root"
+          attribute: "my_name"
+          value:  "jim"
+      register: workspace
+
+    - name: "Set attributes"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attributes:
+          object: "root"
+          attributes:
+            family_name: "timmer"
+            eldest_son: "reed"
+            youngest_son: "olaf"
+      register: workspace
+
+    - name: Decrypt an attribute from an object
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_decrypted_attribute:
+          object: root
+          attribute: fred
+      register: decrypted_attribute
+
+    - debug: msg=decrypted_attribute
+
+    - name: Decrypt a method_parameter from an object
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_decrypted_method_parameter:
+          attribute: fred
+
+    - name: Encrypt an object attribute
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_encrypted_attribute:
+          object: root
+          attribute: freddy
+          value: 'smartvm'
+
+    - name: Grab a vmdb object
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_vmdb_object:
+          object: root
+          attribute: miq_group
+
+
