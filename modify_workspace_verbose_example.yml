@@ -18,12 +18,12 @@
           object: "/ManageIQ/System/Request/call_instance"
           attribute: "::miq::parent"
 
-    - name: "Get an attribute"
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        get_attribute: object: "/ManageIQ/System/Request/call_instance"
-          attribute: "::miq::parent"
-
+#    - name: "Get an attribute"
+#      manageiq_automate:
+#        workspace: "{{ workspace }}"
+#        get_attribute: object: "/ManageIQ/System/Request/call_instance"
+#          attribute: "::miq::parent"
+#
     - name: "Check a state_var"
       manageiq_automate:
         workspace: "{{ workspace }}"
