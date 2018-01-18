@@ -21,7 +21,10 @@
 
       register: miq_request
 
-    - name: Get a vmdb object
+    - name: Update user message in miq_request
       manageiq_vmdb:
         href: "{{ miq_request }}"
-      register: vmdb_object
+        action: edit
+        data: 
+          options:
+            user_message: "hello from Ansible"
