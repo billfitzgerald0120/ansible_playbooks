@@ -4,14 +4,13 @@
   connection: local
   vars:
   - object: root
-  - interval: 300
 
   gather_facts: False
   roles:
   - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
 
   tasks:
-
     - name: "Get miq_request object reference"
       manageiq_automate:
         workspace: "{{ workspace }}"
@@ -20,4 +19,9 @@
           object: "root"
           attribute: "miq_request"
 
-        register: miq_request
+      register: miq_request
+
+    - name: Get a vmdb object
+      manageiq_vmdb:
+        href: "{{ miq_request }}"
+      register: vmdb_object
