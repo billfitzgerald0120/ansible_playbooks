@@ -21,6 +21,8 @@
 
       register: miq_request
 
+    - debug: msg="miq_request is {{ miq_request }}"
+
     - name: Update user message in miq_request
       manageiq_vmdb:
         href: "{{ miq_request }}"
