@@ -1,5 +1,6 @@
 ---
 - name: Modify the Automate Workspace
+# from https://galaxy.ansible.com/syncrou/manageiq-automate/   Example Playbook
   hosts: localhost
   connection: local
   vars:
@@ -9,7 +10,7 @@
   gather_facts: False
   roles:
   - syncrou.manageiq-automate
-  - syncrou.manageiq-vmdb
+# - syncrou.manageiq-vmdb
 
   tasks:
     - name: "Check an attribute"
