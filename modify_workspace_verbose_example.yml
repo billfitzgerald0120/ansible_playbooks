@@ -38,15 +38,15 @@
           value: "xyz"
       register: workspace
 
-    - debug: msg=workspace
+    - debug: msg=job_id
 
-    - name: "Get a state_var"
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        get_state_var:
-          attribute: "job_id"
+#    - name: "Get a state_var"
+#      manageiq_automate:
+#        workspace: "{{ workspace }}"
+#        get_state_var:
+#          attribute: "job_id"
 
-    - debug: msg=task_id
+#    - debug: msg=job_id
 
     - name: "Check a Method Parameter"
       manageiq_automate:
