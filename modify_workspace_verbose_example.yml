@@ -38,7 +38,7 @@
           value: "xyz"
       register: workspace
 
-    - debug: msg=job_id
+    - debug: msg=job_id.value
 
 #    - name: "Get a state_var"
 #      manageiq_automate:
@@ -54,11 +54,13 @@
         method_parameter_exists:
           parameter: "task_id"
 
+    - debug: msg=task_id.value
+
     - name: "Get a Method Parameter"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_method_parameter:
-          parameter: "invoice"
+          parameter: "task_id"
 
     - name: "Get the full list of Objects"
       manageiq_automate:
