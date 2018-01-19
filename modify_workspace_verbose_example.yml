@@ -39,7 +39,7 @@
           value: "xyz"
       register: workspace
 
-    - debug: msg=msg="job_id is {{ jobi_id.value }}"
+    - debug: msg=msg="job_id is {{ job_id.value }}"
 
 #    - name: "Get a state_var"
 #      manageiq_automate:
