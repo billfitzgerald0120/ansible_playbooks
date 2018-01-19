@@ -9,6 +9,7 @@
   gather_facts: False
   roles:
   - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
 
   tasks:
     - name: "Check an attribute"
@@ -38,7 +39,7 @@
           value: "xyz"
       register: workspace
 
-    - debug: msg=job_id.value
+    - debug: msg=msg="workspace is {{ workspace.value }}"
 
 #    - name: "Get a state_var"
 #      manageiq_automate:
@@ -54,13 +55,13 @@
         method_parameter_exists:
           parameter: "task_id"
 
-    - debug: msg=task_id.value
+    - debug: msg=task_id
 
-    - name: "Get a Method Parameter"
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        get_method_parameter:
-          parameter: "task_id"
+#    - name: "Get a Method Parameter"
+#      manageiq_automate:
+#        workspace: "{{ workspace }}"
+#        get_method_parameter:
+#          parameter: "task_id"
 
     - name: "Get the full list of Objects"
       manageiq_automate:
