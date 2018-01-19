@@ -1,5 +1,5 @@
 ---
-- name: Set retry interval
+- name: Get miq request object and update user message
   hosts: localhost
   connection: local
   vars:
