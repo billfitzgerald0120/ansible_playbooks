@@ -57,7 +57,7 @@
         method_parameter_exists:
           parameter: "task_id"
 
-    - debug: msg=task_id.value
+
 
 #    - name: "Get a Method Parameter"
 #      manageiq_automate:
@@ -69,6 +69,10 @@
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_object_names: yes
+
+      register: allobjects
+
+    - debug: msg="allobjects:{{ allobjects }}"
 
     - name: "Get the list of Method Parameters"
       manageiq_automate:
@@ -88,7 +92,7 @@
           object: "root"
       register: myattributes
 
-    - debug: msg="myattributes is {{ myattributes.value }}"
+    - debug: msg="object attributes:{{ myattributes.value }}"
 
     - name: "Set an attribute"
       manageiq_automate:
@@ -118,7 +122,7 @@
           attribute: fred
       register: decrypted_attribute
 
-    - debug: msg=decrypted_attribute
+    - debug: msg=decrypted_attribute:{{ decrypted_attribute }}
 
     - name: Decrypt a method_parameter from an object
       manageiq_automate:
