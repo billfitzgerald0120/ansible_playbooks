@@ -40,7 +40,7 @@
           value: "xyz"
       register: job_id
 
-    - debug: msg="job_id is {{ job_id.value }}"
+    - debug: msg="job_id is {{ job_id }}"
    # try just workspace !!!
 
 #    - name: "Get a state_var"
