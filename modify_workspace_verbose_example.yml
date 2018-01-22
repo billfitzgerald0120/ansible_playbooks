@@ -1,5 +1,5 @@
 ---
-- name: Modify the Automate Workspace
+- name: Modify the Automate  v1.0
 # from https://galaxy.ansible.com/syncrou/manageiq-automate/   Example Playbook
   hosts: localhost
   connection: local
@@ -38,9 +38,9 @@
         set_state_var:
           attribute: "job_id"
           value: "xyz"
-      register: workspace
+      register: job_id
 
-    - debug: msg="workspace is {{ workspace }}"
+    - debug: msg="job_id is {{ job_id.value }}"
    # try just workspace !!!
 
 #    - name: "Get a state_var"
@@ -57,7 +57,7 @@
         method_parameter_exists:
           parameter: "task_id"
 
-    - debug: msg=task_id
+    - debug: msg=task_id.value
 
 #    - name: "Get a Method Parameter"
 #      manageiq_automate:
@@ -88,7 +88,7 @@
           object: "root"
       register: myattributes
 
-    - debug: msg="myattributes is {{ myattributes }}"
+    - debug: msg="myattributes is {{ myattributes.value }}"
 
     - name: "Set an attribute"
       manageiq_automate:
@@ -109,13 +109,6 @@
             eldest_son: "reed"
             youngest_son: "olaf"
       register: workspace
-
-    - name: "Get an attribute - new !!!"
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        get_attribute:
-          object: root
-          attribute: family_name
 
     - name: Decrypt an attribute from an object
       manageiq_automate:
