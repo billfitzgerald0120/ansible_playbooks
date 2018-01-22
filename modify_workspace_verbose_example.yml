@@ -43,27 +43,20 @@
     - debug: msg="job_id is {{ job_id }}"
    # try just workspace !!!
 
-#    - name: "Get a state_var"
-#      manageiq_automate:
-#        workspace: "{{ workspace }}"
-#        get_state_var:
-#          attribute: "job_id"
+    - name: "Get a state_var"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_state_var:
+          attribute: "vmdb_object_type"
+      register: vmdb_object_type 
 
-#    - debug: msg=job_id
+    - debug: msg=vmdb_object_type {{ vmdb_object_type }}
 
     - name: "Check a Method Parameter"
       manageiq_automate:
         workspace: "{{ workspace }}"
         method_parameter_exists:
           parameter: "task_id"
-
-
-
-#    - name: "Get a Method Parameter"
-#      manageiq_automate:
-#        workspace: "{{ workspace }}"
-#        get_method_parameter:
-#          parameter: "task_id"
 
     - name: "Get the full list of Objects"
       manageiq_automate:
@@ -155,6 +148,6 @@
           object: "miq_request"
       register: miq_request
 
-    - debug: msg="miq_request attributes value :{{ miq_request.value }}"
-    - debug: msg="miq_request attributes:{{ miq_request }}"
+    - debug: msg="miq_request attributes value:{{ miq_request.value }}"
+  #  - debug: msg="miq_request attributes:{{ miq_request }}"
 
