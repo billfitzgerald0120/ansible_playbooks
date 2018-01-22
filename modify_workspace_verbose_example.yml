@@ -40,7 +40,7 @@
           value: "xyz"
       register: job_id
 
-    - debug: msg="workspace: {{ job_id }}"
+    - debug: msg="job_id: {{ job_id }}"
 
     - name: "Check a Method Parameter"
       manageiq_automate:
