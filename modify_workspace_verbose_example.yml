@@ -40,7 +40,7 @@
           value: "xyz"
       register: workspace
 
-   # - debug: msg="job_id is {{ workspace.job_id }}"
+    - debug: msg="workspace is {{ workspace }}"
    # try just workspace !!!
 
 #    - name: "Get a state_var"
@@ -86,6 +86,9 @@
         workspace: "{{ workspace }}"
         get_object_attribute_names:
           object: "root"
+      register: myattributes
+
+    - debug: msg="myattributes is {{ myattributes }}"
 
     - name: "Set an attribute"
       manageiq_automate:
