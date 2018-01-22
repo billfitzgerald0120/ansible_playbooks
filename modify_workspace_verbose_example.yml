@@ -40,7 +40,8 @@
           value: "xyz"
       register: workspace
 
-   # - debug: msg=msg="job_id is {{ job_id.value }}"
+   # - debug: msg="job_id is {{ workspace.job_id }}"
+   # try just workspace !!!
 
 #    - name: "Get a state_var"
 #      manageiq_automate:
@@ -105,6 +106,13 @@
             eldest_son: "reed"
             youngest_son: "olaf"
       register: workspace
+
+    - name: "Get an attribute - new !!!"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_attribute:
+          object: root
+          attribute: family_name
 
     - name: Decrypt an attribute from an object
       manageiq_automate:
