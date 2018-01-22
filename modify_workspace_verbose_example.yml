@@ -92,7 +92,7 @@
           object: "root"
       register: myattributes
 
-    - debug: msg="object attributes:{{ myattributes.value }}"
+    - debug: msg="root object attributes:{{ myattributes.value }}"
 
     - name: "Set an attribute"
       manageiq_automate:
@@ -145,4 +145,16 @@
           object: root
           attribute: miq_group
 
+# New playboooks below 
+
+
+    - name: "Get the full list of Object Attribute Names"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_attribute_names:
+          object: "miq_request"
+      register: miq_request
+
+    - debug: msg="miq_request attributes value :{{ miq_request.value }}"
+    - debug: msg="miq_request attributes:{{ miq_request }}"
 
