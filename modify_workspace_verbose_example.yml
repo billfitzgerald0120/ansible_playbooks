@@ -40,17 +40,7 @@
           value: "xyz"
       register: job_id
 
-    - debug: msg="job_id is {{ job_id }}"
-   # try just workspace !!!
-
-    - name: "Get a state_var"
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        get_state_var:
-          attribute: "vmdb_object_type"
-      register: vmdb_object_type 
-
-    - debug: msg=vmdb_object_type {{ vmdb_object_type }}
+    - debug: msg="workspace: {{ job_id }}"
 
     - name: "Check a Method Parameter"
       manageiq_automate:
