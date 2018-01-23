@@ -16,7 +16,7 @@
         workspace: "{{ workspace }}"
         get_object_attribute_names:
 
-          object: {{ object }}
+          object: "root"
       register:    attribute_list
 
     - debug: msg="attribute_list is {{ attribute_list }}"
