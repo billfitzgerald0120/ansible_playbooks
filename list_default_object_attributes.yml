@@ -1,0 +1,19 @@
+---
+- name: Use root as default object
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Use root if no object if specified"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_attribute_names:
+      register: myattributes
+
+    - debug: msg="default(root) object attributes:{{ myattributes.value }}"
