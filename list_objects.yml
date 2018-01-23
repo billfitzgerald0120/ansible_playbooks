@@ -1,5 +1,5 @@
 ---
-- name: Set a state var
+- name: Get the full list of Objects
   hosts: localhost
   connection: local
   vars:
@@ -10,10 +10,13 @@
   - syncrou.manageiq-automate
 
   tasks:
-    - name: "Set state var job_id"
+    - name: "Get the full list of Objects"
       manageiq_automate:
         workspace: "{{ workspace }}"
-        set_state_var:
-          attribute: "job_id"
-          value: "xyz"
-      register: job_id
+        get_object_names: yes
+
+      register: allobjects
+
+    - debug: msg="allobjects:{{ allobjects }}"
+
+
