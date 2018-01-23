@@ -20,7 +20,3 @@
 
       register: miq_request
       ignore_errors: yes
-      
-    - debug: msg="miq_request is {{ miq_request.value }}"
-
-
