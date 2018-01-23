@@ -1,0 +1,24 @@
+---
+- name: Get attribute names in root object 
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
+
+  tasks:
+    - name: "Get root object reference"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_attribute_names:
+
+          object: {{ object }}
+      register:    attribute_list
+
+    - debug: msg="attribute_list is {{ attribute_list }}"
+
+
