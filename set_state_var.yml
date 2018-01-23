@@ -1,10 +1,9 @@
 ---
-- name: Set a State Var
+- name: Check a State Var exsits
   hosts: localhost
   connection: local
   vars:
   - object: root
-  - manageiq_validate_certs: False
 
   gather_facts: False
   roles:
@@ -12,13 +11,15 @@
   - syncrou.manageiq-vmdb
 
   tasks:
-    - name: "Set a State Var"
+    - name: "Check a State Var exist"
       manageiq_automate:
         workspace: "{{ workspace }}"
-        set_state_var:
-          attribute: "job_id"
-          value: "xyz"
-      register: job_id
+        state_var_exists:
+          attribute: "task_id"
+      register: task_id
 
-    - debug: msg="job_id:{{ job_id }}"
-    
+    - debug: msg="task_id:{{ task_id }}"
+
+
+
+          
