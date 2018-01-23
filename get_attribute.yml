@@ -11,13 +11,13 @@
   - syncrou.manageiq-vmdb
 
   tasks:
-    - name: "Get root object reference"
+    - name: "Get var1 from root"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_attribute:
 
           object: "root"
-          atrtribute: "var1"
+          attribute: "var1"
       register:    result
 
     - debug: msg="attribute result dictionary {{ result }}"
