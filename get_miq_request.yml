@@ -20,7 +20,8 @@
           attribute: "miq_request"
 
       register: miq_request
-
+      ignore_errors: yes
+      
     - debug: msg="miq_request is {{ miq_request.value }}"
 
     - name: Update user message in miq_request
