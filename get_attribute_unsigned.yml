@@ -1,0 +1,26 @@
+---
+- name: Get attribute unsigned
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - manageiq_validate_certs: False
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
+
+  tasks:
+    - name: "Get var1 from root using unsigned"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_attribute:
+
+          object: "root"
+          attribute: "var1"
+      register:    result
+
+    - debug: msg="attribute result dictionary {{ result }}"
+    - debug: msg="attribute result value is {{ result.value }}"
+
