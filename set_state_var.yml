@@ -1,0 +1,24 @@
+---
+- name: Set a State Var
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+  - manageiq_validate_certs: False
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
+
+  tasks:
+    - name: "Set a State Var"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_state_var:
+          attribute: "job_id"
+          value: "xyz"
+      register: job_id
+
+    - debug: msg="job_id:{{ job_id }}"
+    
