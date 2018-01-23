@@ -1,0 +1,21 @@
+---
+- name: Get the list of Method Parameters
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Get the list of Method Parameters"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_method_parameters: yes
+      register: method_params
+
+    - debug: msg="method_params:{{ method_params }}"
+
+

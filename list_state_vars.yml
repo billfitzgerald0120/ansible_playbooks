@@ -1,0 +1,21 @@
+---
+- name: Get the list of State Vars
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Get the list of State Vars"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_state_var_names: yes
+      register: workspace
+
+    - debug: msg="workspace:{{ workspace }}"
+
+

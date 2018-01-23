@@ -1,0 +1,20 @@
+---
+- name: Get the full list of Object Attribute Names
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Get the full list of Object Attribute Names"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_object_attribute_names:
+          object: "root"
+      register: myattributes
+
+    - debug: msg="root object attributes:{{ myattributes.value }}"
