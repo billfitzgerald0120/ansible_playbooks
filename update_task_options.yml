@@ -13,7 +13,7 @@
   tasks:
     - name: Update vmname in Task options
       manageiq_vmdb:
-        href: "{{ manageiq.task_href_slug }}"
+        href: "{{ manageiq.request_task }}"
         action: edit
         data: 
           options:
