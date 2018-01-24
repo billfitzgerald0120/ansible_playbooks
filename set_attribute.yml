@@ -4,6 +4,7 @@
   connection: local
   vars:
   - object: root
+  - auto_commit: False
 
   gather_facts: False
   roles:
