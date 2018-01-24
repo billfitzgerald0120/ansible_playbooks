@@ -1,0 +1,21 @@
+---
+- name: Get Decrypted root attribute
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+   - name: Decrypt an attribute from an object
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_decrypted_attribute:
+          object: root
+          attribute: fred
+      register: attribute
+
+    - debug: msg="get decrypted root attribute:{{ attribute }}"
