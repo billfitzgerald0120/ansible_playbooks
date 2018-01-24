@@ -1,0 +1,22 @@
+---
+- name: Set root attribute
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Set root attribute"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attribute:
+          object: "root"
+          attribute: "my_name"
+          value:  "jim"
+      register: attribute
+
+    - debug: msg="set root attribute:{{ attribute.value }}"
