@@ -1,0 +1,22 @@
+---
+- name: Set encrypted root attribute
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Set my_encrypted_name var in root"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_encrypted_attribute:
+          object: "root"
+          attribute: "my_encrypted_name"
+          value:  "unchanged"
+      register: attribute
+
+    - debug: msg="set root attribute:{{ attribute }}"
