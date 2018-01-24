@@ -16,7 +16,7 @@
         set_attribute:
           object: "root"
           attribute: "my_name"
-          value:  "jim"
+          value:  "unchanged"
       register: attribute
 
     - debug: msg="set root attribute:{{ attribute }}"
