@@ -22,4 +22,4 @@
             youngest_son: "olaf"
       register: attributes
 
-    - debug: msg="set root attributes unsigned:{{ attributes.value }}"
+    - debug: msg="set root attributes unsigned:{{ attributes }}"

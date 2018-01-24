@@ -21,4 +21,4 @@
             youngest_son: "olaf"
       register: attributes
 
-    - debug: msg="set root attributes:{{ attributes.value }}"
+    - debug: msg="set root attributes:{{ attributes }}"
