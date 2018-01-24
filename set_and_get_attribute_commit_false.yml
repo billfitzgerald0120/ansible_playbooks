@@ -11,7 +11,7 @@
   - syncrou.manageiq-automate
 
   tasks:
-    - name: "Set root attribute"
+    - name: "Set my_name in root without commit"
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_attribute:

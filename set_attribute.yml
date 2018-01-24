@@ -4,14 +4,13 @@
   connection: local
   vars:
   - object: root
-  - auto_commit: False
 
   gather_facts: False
   roles:
   - syncrou.manageiq-automate
 
   tasks:
-    - name: "Set root attribute"
+    - name: "Set my_name var in root"
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_attribute:
