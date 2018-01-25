@@ -1,0 +1,21 @@
+---
+- name: Set an attribute in a non existent object
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Set notthere attribute in root"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attribute:
+          object: "root"
+          attribute: "notthere"
+        register: attribute
+
+    - debug: msg="set root attribute:{{ attribute }}"

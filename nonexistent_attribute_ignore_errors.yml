@@ -1,5 +1,5 @@
 ---
-- name: fetch non existent attribute from an object 
+- name: Get a non existent attribute from an object that does exist
   hosts: localhost
   connection: local
   vars:
