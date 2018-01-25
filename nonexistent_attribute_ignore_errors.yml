@@ -1,0 +1,23 @@
+---
+- name: fetch non existent attribute from an object 
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+# Even though the object does not exist, this playbook will not fail
+  tasks:
+    - name: "Get notthere attribute from root and ignore error"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        get_attribute:
+
+          object: "root"
+          attribute: "notthere"
+
+      register: notthere
+      ignore_errors: yes
