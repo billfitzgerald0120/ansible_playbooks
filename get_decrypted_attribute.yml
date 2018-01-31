@@ -18,4 +18,4 @@
           attribute: fred
       register: attribute
 
-    - debug: msg="get decrypted root attribute:{{ attribute }}"
+   - debug: msg="get decrypted root attribute:{{ attribute }}"
