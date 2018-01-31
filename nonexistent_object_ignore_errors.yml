@@ -1,5 +1,5 @@
 ---
-- name: fetch attribute from an object that doesnt exist 
+- name: Get attribute from a non existent object  
   hosts: localhost
   connection: local
   vars:
@@ -9,15 +9,12 @@
   roles:
   - syncrou.manageiq-automate
 
-# Even though the object does not exist, this playbook will not fail
   tasks:
-    - name: "Get attribute from non existent object"
+    - name: "Get missing attribute from non existent object and ignore error"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_attribute:
-
-          object: "notthere"
-          attribute: "miq_request"
-
-      register: miq_request
+          object: "noroot"
+          attribute: "missing"
+      register: missing
       ignore_errors: yes

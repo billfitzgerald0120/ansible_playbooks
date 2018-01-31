@@ -9,14 +9,11 @@
   roles:
   - syncrou.manageiq-automate
 
-# Even though the object does not exist, this playbook will not fail
   tasks:
-    - name: "Get notthere attribute from root"
+    - name: "Get novar attribute from root object"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_attribute:
-
           object: "root"
-          attribute: "notthere"
-
-      register: notthere
+          attribute: "novar"
+      register: noobject

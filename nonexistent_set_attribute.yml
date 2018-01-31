@@ -1,5 +1,5 @@
 ---
-- name: Set an attribute in a non existent object
+- name: Set a non existent attribute in a object
   hosts: localhost
   connection: local
   vars:
@@ -15,7 +15,7 @@
         workspace: "{{ workspace }}"
         set_attribute:
           object: "root"
-          attribute: "notthere"
+          attribute: "novar"
         register: attribute
 
     - debug: msg="set root attribute:{{ attribute }}"

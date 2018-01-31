@@ -1,5 +1,5 @@
 ---
-- name: Set and get encrypted root attribute
+- name: Set and get an encrypted root attribute
   hosts: localhost
   connection: local
   vars:
@@ -10,7 +10,8 @@
   - syncrou.manageiq-automate
 
   tasks:
-    - name: "Encrypt fred var in root"
+ 
+    - name: "Encrypt fred var in root object"
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_encrypted_attribute:
@@ -21,7 +22,7 @@
 
     - debug: msg="set encryped root attribute:{{ attribute }}"
 
-    - name: Decrypt fred var in roor
+    - name: "Decrypt fred var in root object"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_decrypted_attribute:
