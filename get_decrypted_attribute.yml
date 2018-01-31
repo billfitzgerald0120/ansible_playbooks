@@ -18,4 +18,6 @@
           attribute: fred
       register: attribute
 
+      ignore_errors: yes
+
    - debug: msg="get decrypted root attribute:{{ attribute }}"
