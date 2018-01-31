@@ -26,12 +26,9 @@
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_attribute:
-
           object: "root"
           attribute: "my_name"
       register:    result
 
     - debug: msg="attribute result dictionary {{ result }}"
     - debug: msg="attribute result value is {{ result.value }}"
-
-

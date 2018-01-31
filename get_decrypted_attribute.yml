@@ -10,7 +10,7 @@
   - syncrou.manageiq-automate
 
   tasks:
-   - name: Decrypt attribute fred from root object
+   - name: "Decrypt attribute fred from root object"
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_decrypted_attribute:

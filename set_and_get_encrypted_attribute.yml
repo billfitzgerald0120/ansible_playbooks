@@ -10,7 +10,6 @@
   - syncrou.manageiq-automate
 
   tasks:
- 
     - name: "Encrypt fred var in root object"
       manageiq_automate:
         workspace: "{{ workspace }}"
