@@ -16,6 +16,6 @@
         set_attribute:
           object: "root"
           attribute: "novar"
-        register: attribute
+        register: novar
 
-    - debug: msg="set root attribute:{{ attribute }}"
+    - debug: msg="set root attribute:{{ novar }}"
