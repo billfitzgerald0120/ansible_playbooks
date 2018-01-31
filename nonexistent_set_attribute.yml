@@ -18,4 +18,4 @@
           attribute: "novar"
         register: novar
 
-    - debug: msg="set root attribute:{{ novar }}"
+    - debug: msg="set root novar:{{ novar }}"
