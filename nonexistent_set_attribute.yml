@@ -17,4 +17,4 @@
           object: "noroot"
           attribute: "var1"
           value:  "unchanged"
-      register: attribute
+      register: var1
