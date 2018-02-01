@@ -18,5 +18,3 @@
           attribute: "var1"
           value:  "unchanged"
       register: attribute
-
-    - debug: msg="set root attribute:{{ attribute }}"
