@@ -20,3 +20,6 @@
             vm_target_name: "name_from_ansible"
             cpu_limit: 4
             vm_memory: 4096
+      register:    result
+
+    - debug: msg="attribute result dictionary {{ result }}"
