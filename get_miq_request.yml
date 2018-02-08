@@ -12,19 +12,8 @@
 
   tasks:
     - name: "Get miq_request object reference"
-      manageiq_automate:
- #      workspace: "{{ workspace }}"
-        href: "{{ manageiq.request_task }}"
-        get_attribute:
-          object: "root"
-          attribute: "miq_request"
-      register: miq_request
-
-    - debug: msg="miq_request is {{ miq_request.value }}"
-
-    - name: Update user message in miq_request
       manageiq_vmdb:
-        href: "{{ miq_request.value }}"
+        href: "{{ manageiq.request_task }}"
         action: edit
         data: 
           options:
