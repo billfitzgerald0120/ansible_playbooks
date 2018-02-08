@@ -12,10 +12,10 @@
 
   tasks:
     - name: "Get miq_request object reference"
-      manageiq_vmdb:
- #     manageiq_automate:
- #      workspace: "{{ workspace }}"
-        href: "{{ manageiq.request_task }}"
+ #     manageiq_vmdb:
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+ #       href: "{{ manageiq.request_task }}"
         get_attribute:
           object: "root"
           attribute: "miq_request"
