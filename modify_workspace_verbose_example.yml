@@ -31,6 +31,9 @@
         workspace: "{{ workspace }}"
         state_var_exists:
           attribute: "task_id"
+      register: myattributes
+
+    - debug: msg="root object attributes:{{ myattributes.value }}"
 
     - name: "Set a State Var"
       manageiq_automate:
@@ -67,6 +70,9 @@
       manageiq_automate:
         workspace: "{{ workspace }}"
         get_state_var_names: yes
+      register: myattributes
+
+    - debug: msg="root object attributes:{{ myattributes.value }}"
 
     - name: "Get the full list of Object Attribute Names"
       manageiq_automate:
