@@ -3,7 +3,4 @@
   hosts: localhost
   
   tasks:
-  - debug: msg="In Ansible method at {{ ansible_date_time.iso8601 }} "
-
-
-
+  - debug: msg="BZ1557310 In Ansible method at {{ ansible_date_time.iso8601 }} "
