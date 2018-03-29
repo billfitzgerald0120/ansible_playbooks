@@ -4,7 +4,7 @@
   connection: local
   vars:
   - object: root
-  - interval: 300
+  - interval: 61
 
   gather_facts: False
   roles:
