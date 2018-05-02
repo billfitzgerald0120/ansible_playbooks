@@ -10,7 +10,7 @@
       automate_workspace: 'automate_workspaces/1234'
       manageiq_validate_certs: false
   roles:
-    - manageiq-automate
+    - syncrou.manageiq-automate
 
   tasks:
     - name: Set a State Var IP
