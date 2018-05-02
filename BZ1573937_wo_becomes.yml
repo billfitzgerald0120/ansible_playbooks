@@ -5,10 +5,10 @@
     - auto_commit: true
     - interval: 60
     - manageiq_connection:
-      url: 'https://localhost:3000'
-      username: 'admin'
-      password: 'password'
-      automate_workspace: 'automate_workspaces/1234'
+        url: 'https://localhost:3000'
+        username: 'admin'
+        password: 'password'
+        automate_workspace: 'automate_workspaces/1234'
       manageiq_validate_certs: false
   roles:
     - syncrou.manageiq-automate
