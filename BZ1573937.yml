@@ -1,6 +1,5 @@
 - hosts: all
   gather_facts: False
-  become: yes
   vars:
     - auto_commit: true
     - interval: 60
@@ -11,11 +10,10 @@
       automate_workspace: 'automate_workspaces/1234'
       manageiq_validate_certs: false
   roles:
-    - syncrou.manageiq-automate
+    - manageiq-automate
 
   tasks:
     - name: Set a State Var IP
-      become: false
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_state_var:
@@ -29,7 +27,6 @@
         msg: workspace
 
     - name: Set an attribute
-      become: false
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_attribute:
