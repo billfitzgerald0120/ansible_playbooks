@@ -1,0 +1,19 @@
+---
+- name: Set a state var
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Set state var job_id"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_state_var:
+          attribute: "ip"
+          value: "2.2.2.2"
+      register: ip
