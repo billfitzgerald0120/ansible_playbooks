@@ -1,0 +1,40 @@
+- hosts: all
+  gather_facts: False
+  become: yes
+  vars:
+    - auto_commit: true
+    - interval: 60
+    - manageiq_connection:
+      url: 'https://localhost:3000'
+      username: 'admin'
+      password: 'password'
+      automate_workspace: 'automate_workspaces/1234'
+      manageiq_validate_certs: false
+  roles:
+    - manageiq-automate
+
+  tasks:
+    - name: Set a State Var IP
+      become: false
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_state_var:
+          attribute: "ip"
+          value: "2.2.2.2"
+      register: workspace
+      delegate_to: 127.0.0.1
+
+    - name: debug
+      debug:
+        msg: workspace
+
+    - name: Set an attribute
+      become: false
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attribute:
+          object: "root"
+          attribute: "ae_result"
+          value: "ok"
+      register: workspace
+      delegate_to: 127.0.0.1
