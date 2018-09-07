@@ -15,4 +15,5 @@
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_retry:
-          interval: "{{ miq_retry_interval|default(60,true) }}"
+          interval: "{{ miq_retry_interval }}"
+
