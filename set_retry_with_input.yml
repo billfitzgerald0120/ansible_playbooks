@@ -15,5 +15,9 @@
       manageiq_automate:
         workspace: "{{ workspace }}"
         set_retry:
-          interval: "{{ miq_retry_interval }}"
+          interval: "{{ miq_retry_interval |default(60,true) }}"
+      register:    result
 
+    - debug: msg="attribute result dictionary {{ result }}"
+    - debug: msg="attribute result value is {{ result.value }}"
+    
