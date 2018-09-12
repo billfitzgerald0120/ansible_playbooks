@@ -18,6 +18,4 @@
           interval: "{{ miq_retry_interval |default(60,true) }}"
       register:    result
 
-    - debug: msg="attribute result dictionary {{ result }}"
-    - debug: msg="attribute result value is {{ result.value }}"
-    
+    - debug: msg="Retry interval set to {{ miq_retry_interval }}"
