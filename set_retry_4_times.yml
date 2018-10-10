@@ -1,0 +1,25 @@
+---
+# This playbook is used to test the retry logic in a CloudForms state machine
+#
+# It sets the state result to "retry" for the first 3 runs, then passes successfully
+
+- name: Set retry interval with input
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - debug:
+      msg: State retry number {{ workspace.workspace.input.objects.root.ae_state_retries }}
+
+    - name: Set Retry
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_retry:
+          interval: "{{ miq_retry_interval |default(60,true) }}"
+      when: workspace.workspace.input.objects.root.ae_state_retries|int < 3
