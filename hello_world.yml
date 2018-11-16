@@ -1,6 +1,7 @@
 ---
-- name: Print Hello World
+# This playbook prints a simple debug message
+- name: Echo Hello, world!
   hosts: localhost
   
   tasks:
-  - debug: msg="Hello World"
+  - debug: msg="Hello, world!"
