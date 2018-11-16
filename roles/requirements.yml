@@ -1,4 +1,4 @@
 ---
 # from galaxy
-- src: syncrou.manageiq-automate
-- src: syncrou.manageiq-vmdb
+# - src: syncrou.manageiq-automate
+# - src: syncrou.manageiq-vmdb
