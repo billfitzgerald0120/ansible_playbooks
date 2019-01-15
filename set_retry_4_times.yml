@@ -14,12 +14,11 @@
   - syncrou.manageiq-automate
 
   tasks:
-    - debug:
-      msg: State retry number {{ workspace.workspace.input.objects.root.ae_state_retries }}
+  - debug: msg="State retry number {{ workspace.workspace.input.objects.root.ae_state_retries }}""
 
-    - name: Set Retry
-      manageiq_automate:
-        workspace: "{{ workspace }}"
-        set_retry:
-          interval: "{{ miq_retry_interval |default(60,true) }}"
-      when: workspace.workspace.input.objects.root.ae_state_retries|int < 3
+  - name: Set Retry
+    manageiq_automate:
+      workspace: "{{ workspace }}"
+      set_retry:
+        interval: "{{ miq_retry_interval |default(60,true) }}"
+    when: workspace.workspace.input.objects.root.ae_state_retries|int < 3
