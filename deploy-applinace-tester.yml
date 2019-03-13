@@ -4,9 +4,9 @@
   connection: local
 
   gather_facts: False
-  roles:
-  - syncrou.manageiq-automate
-  - syncrou.manageiq-vmdb
+#  roles:
+# - syncrou.manageiq-automate
+ # - syncrou.manageiq-vmdb
 
   # serial: 1
   tasks:
