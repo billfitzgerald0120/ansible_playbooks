@@ -7,7 +7,7 @@
 
    - name: Deploying OVA File
      vmware_deploy_ovf:
-       hostname: '{{ hostname }}''
+       hostname: '{{ hostname }}'
        username: '{{ redhatID }}'
        password: '{{ redhatPass }}'
        cluster: dev-vc67-cluster
