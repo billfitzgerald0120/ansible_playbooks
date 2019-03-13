@@ -1,9 +1,17 @@
 ---
-- hosts: localhost
-  serial: 1
+- name: testing Joes deploy appliance
+  hosts: localhost
+  connection: local
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+  - syncrou.manageiq-vmdb
+
+  # serial: 1
   tasks:
-   - name: Getting ova file
-     shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova /tmp/{{ version }}.ova"
+   # - name: Getting ova file
+   #  shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova /tmp/{{ version }}.ova"
 
    - name: Deploying OVA File
      vmware_deploy_ovf:
