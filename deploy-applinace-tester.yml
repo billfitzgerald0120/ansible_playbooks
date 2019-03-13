@@ -7,7 +7,7 @@
 
    - name: Deploying OVA File
      vmware_deploy_ovf:
-       hostname: '{{ hostname }}'
+       hostname: '{{ myhost }}'
        username: '{{ redhatID }}'
        password: '{{ redhatPass }}'
        cluster: dev-vc67-cluster
@@ -22,7 +22,7 @@
 
 #   - name: Adding DB disk to appliance
 #     vmware_guest_disk:
-#       hostname: '{{ hostname }}'
+#       hostname: '{{ myhost }}'
 #       username: '{{ redhatID }}'
 #       password: '{{ redhatPass }}'
 #       datacenter: dev-vc67-DC
@@ -38,7 +38,7 @@
 
    - name: Powering on appliance
      vmware_guest:
-       hostname: '{{ hostname }}'
+       hostname: '{{ myhost }}'
        username: '{{ redhatID }}'
        password: '{{ redhatPass }}'
        validate_certs: no
