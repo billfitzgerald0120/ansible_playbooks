@@ -13,7 +13,7 @@
     - name: Getting ova file
    #  shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova /tmp/{{ version }}.ova"
       shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova /run/{{ version }}.ova"
-      become: true
+   #   become: true
 
     - name: Deploying OVA File
       vmware_deploy_ovf:
