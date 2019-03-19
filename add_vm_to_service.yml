@@ -2,7 +2,7 @@
 - name: Register vm with the service
   hosts: localhost
   uri:
-    url: "{{ manageiq.api_url }}/api/services"
+    url: "https://10.8.99.247/api/services"
     method: POST
     body_format: json
     body:
@@ -10,7 +10,7 @@
       resources : "billy_vmname10"
     validate_certs: False
     headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
+      X-Auth-Token: "adce6868899428088cae127788786d83"
       Content-Type: "application/json"
     status_code: 200
   register: output
