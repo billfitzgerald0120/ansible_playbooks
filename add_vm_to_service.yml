@@ -1,16 +1,18 @@
-    - name: Register vm with the service
-      uri:
-        url: "{{ manageiq.api_url }}/api/services"
-        method: POST
-        body_format: json
-        body:
-          action: add_resource
-          resources : "{{ billy_vmname10 }}"
-        validate_certs: False
-        headers:
-          X-Auth-Token: "{{ manageiq.api_token }}"
-          Content-Type: "application/json"
-        status_code: 200
-      register: output
+---
+- name: Register vm with the service
+  hosts: localhost
+  uri:
+    url: "{{ manageiq.api_url }}/api/services"
+    method: POST
+    body_format: json
+    body:
+      action: add_resource
+      resources : "billy_vmname10"
+    validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: output
 
-    - debug: var=output.json.results[0].success
+- debug: var=output.json.results[0].success
