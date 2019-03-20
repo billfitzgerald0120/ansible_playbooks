@@ -19,13 +19,24 @@
     set_fact:
       provider_url: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
 
+  - name: Build body
+    set_fact:
+      payload: 
+        action: add_provider_vms
+        resource: 
+          provider: 
+            href: {{ provider_url }}
+          uid_ems: 
+            [ {{ uid_ems }}]
+  - debug: msg="payload = {{ payload }}"
+
+
   - name: Register vms with the service
     uri:
       url: "{{ svc_url }}"
       method: POST
       body:
-        action: add_provider_vms
-        resource: "{ 'provider' : { 'href' :  {{ provider_url }} }, 'uid_ems' : [ {{ uid_ems }} ] }"
+        {{ payload }}
       body_format: json
       validate_certs: False
       headers:
