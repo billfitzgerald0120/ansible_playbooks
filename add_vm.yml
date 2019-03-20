@@ -21,20 +21,20 @@
 
   - name: Build body
     set_fact:
-      payload: 
+      payload:
         action: add_provider_vms
-        resource: 
-          provider: 
-            href: {{ provider_url }}
-          uid_ems: 
-            - {{ uid_ems }}
+        resource:
+          provider:
+            href: "{{ provider_url }}"
+          uid_ems:
+            - "{{ uid_ems }}"
   - debug: msg="payload = {{ payload }}"
 
   - name: Register vms with the service
     uri:
       url: "{{ svc_url }}"
       method: POST
-      body: {{ payload }}
+      body:  "{{ payload }}"
       body_format: json
       validate_certs: False
       headers:
@@ -46,5 +46,5 @@
   - debug: var=output.json.results[0].success
 
   - name: Check if the VM was successfully attached to service
-    fail: msg="{{output.json.results[0].message}}"
+    fail: msg="{{ output.json.results[0].message }}"
     when: output.json.results[0].success == false
