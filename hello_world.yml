@@ -2,6 +2,9 @@
 # This playbook prints a simple debug message
 - name: Echo Hello, world!
   hosts: localhost
-  
+
   tasks:
   - debug: msg="Hello, world!"
+  - debug: msg="service = {{ manageiq.service }}"
+  - debug: msg="token = {{ manageiq.api_token }}"
+  - debug: msg="api_url = {{ manageiq.api_url }}"
