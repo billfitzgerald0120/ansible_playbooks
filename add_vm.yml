@@ -34,8 +34,7 @@
     uri:
       url: "{{ svc_url }}"
       method: POST
-      body:
-        {{ payload }}
+      body: {{ payload }}
       body_format: json
       validate_certs: False
       headers:
