@@ -38,4 +38,4 @@
 
   - name: Check if the VM was successfully attached to service
     fail: msg="{{output.json.results[0].message}}"
-      when: output.json.results[0].success == false
+    when: output.json.results[0].success == false
