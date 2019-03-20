@@ -1,0 +1,43 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, world!
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello, world!"
+  - debug: msg="service = {{ manageiq.service }}"
+  - debug: msg="token = {{ manageiq.api_token }}"
+  - debug: msg="api_url = {{ manageiq.api_url }}"
+  - debug: msg="uid_ems = {{ manageiq.uid_ems }}"
+  - debug: msg="provider_href_slug = {{ manageiq.provider_href_slug }}"
+
+  - name: Set the Service URL
+    set_fact:
+      svc_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+
+  - name: Set the Provider URL
+    set_fact:
+      provider_url: "{{ manageiq.api_url }}/api/{{ manageiq.provider_href_slug }}"
+
+	- debug: var=uid_ems
+
+    - name: Register vms with the service
+      uri:
+        url: "{{ svc_url }}"
+        method: POST
+        body_format: json
+        body:
+          action: add_provider_vms
+          resource: "{ 'provider' : { 'href' :  {{ provider_url }} }, 'uid_ems' : [ {{ manageiq.uid_ems }} ] }"
+        validate_certs: False
+        headers:
+          X-Auth-Token: "{{ manageiq.api_token }}"
+          Content-Type: "application/json"
+        status_code: 200
+      register: output
+
+    - debug: var=output.json.results[0].success
+
+    - name: Check if the VM was successfully attached to service
+      fail: msg="{{output.json.results[0].message}}"
+      when: output.json.results[0].success == false
