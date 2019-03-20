@@ -50,13 +50,13 @@
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
 
 # Tasks below registers the Vm with cloudforms
-    - name: Registers the Vm with cloudforms
+#    - name: Registers the Vm with cloudforms
 # ip address -> deployInfo.instance.hw_eth0.ipaddresses[0]
  #  tasks:
-    - debug: msg="service = {{ manageiq.service }}"
-    - debug: msg="token = {{ manageiq.api_token }}"
-    - debug: msg="api_url = {{ manageiq.api_url }}"
-    - debug: msg="provider_href_slug = {{ provider_href_slug }}"
+#    - debug: msg="service = {{ manageiq.service }}"
+#    - debug: msg="token = {{ manageiq.api_token }}"
+#    - debug: msg="api_url = {{ manageiq.api_url }}"
+ #   - debug: msg="provider_href_slug = {{ provider_href_slug }}"
 
     - name: Build body
       set_fact:
