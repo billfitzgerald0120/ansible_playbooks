@@ -1,20 +1,13 @@
 ---
-- name: testing Joes deploy appliance
-  hosts: localhost
-  connection: local
-
-  gather_facts: False
-#  roles:
-# - syncrou.manageiq-automate
- # - syncrou.manageiq-vmdb
-
-  # serial: 1
+- hosts: localhost
   tasks:
-    - name: Getting ova file
-   #  shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova /tmp/{{ version }}.ova"
+    - name: Getting file
       shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
-   #   become: true
-   #   delegate_to: 10.8.96.139
+    - name: Locating File
+      find:
+        paths: "/builds/manageiq/{{ release }}/{{ version }}/"
+        patterns: "manageiq-vsphere*.ova"
+      register: ova_image
 
     - name: Deploying OVA File
       vmware_deploy_ovf:
@@ -24,28 +17,13 @@
         cluster: dev-vc67-cluster
         datacenter: dev-vc67-DC
         datastore: NFS Share
-        ovf: "{{ version }}.ova"
+        ovf: "{{ item.path }}"
         allow_duplicates: no
         validate_certs: no
         name: '{{ newvm }}'
         power_on: no
+      with_items: "{{ ova_image.files }}"
       delegate_to: localhost
-
-#   - name: Adding DB disk to appliance
-#     vmware_guest_disk:
-#       hostname: '{{ myhost }}'
-#       username: '{{ redhatID }}'
-#       password: '{{ redhatPass }}'
-#       datacenter: dev-vc67-DC
-#       name: '{{ newvm }}'
-#       validate_certs: no
-#       disk:
-#       - size_gb: 100
-#         state: present
-#         scsi_controller: 2
-#         unit_number: 1
-#         type: thin
-#         datastore: NFS Share
 
     - name: Powering on appliance
       vmware_guest:
@@ -63,16 +41,6 @@
       setup:
       register: moreInfo
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-
-#   - name: Setting up DB on sdb
-#     shell: appliance_console_cli --internal --dbdisk /dev/sdb --region 0 --password smartvm
-#     delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-#     when: moreInfo.ansible_facts.ansible_devices.sda.size != '100.00 GB'
-
-#   - name: Setting up DB on sda
-#     shell: appliance_console_cli --internal --dbdisk /dev/sda --region 0 --password smartvm
-#     delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-#     when: moreInfo.ansible_facts.ansible_devices.sdb.size != '100.00 GB'
 
     - name: ManageIQ - Starting EVM service manually
       shell: systemctl start evmserverd.service
