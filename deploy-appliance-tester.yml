@@ -48,3 +48,43 @@
 
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
+
+# Tasks below registers the Vm with cloudforms
+    - name: Registers the Vm with cloudforms
+# ip address -> deployInfo.instance.hw_eth0.ipaddresses[0]
+ #  tasks:
+    - debug: msg="service = {{ manageiq.service }}"
+    - debug: msg="token = {{ manageiq.api_token }}"
+    - debug: msg="api_url = {{ manageiq.api_url }}"
+    - debug: msg="provider_href_slug = {{ provider_href_slug }}"
+
+    - name: Build body
+      set_fact:
+        payload:
+          action: add_provider_vms
+          resource:
+            provider:
+              href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
+            uid_ems:
+              - "{{ deployInfo.instance.instance_uuid }}"
+    - debug: msg="payload = {{ payload }}"
+
+    - name: Register Vm with Cloudforms
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+        method: POST
+        body:  "{{ payload }}"
+        body_format: json
+        validate_certs: False
+        user: "{{ cfme_userid }}"
+        password: "{{ cfme_password }}"
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+      register: output
+
+    - debug: var=output.json.success
+
+    - name: Check if the VM was successfully attached to service
+      fail: msg="{{ output.json.message }}"
+      when: output.json.success == false
