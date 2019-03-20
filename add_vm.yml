@@ -8,8 +8,8 @@
   - debug: msg="service = {{ manageiq.service }}"
   - debug: msg="token = {{ manageiq.api_token }}"
   - debug: msg="api_url = {{ manageiq.api_url }}"
-  - debug: msg="uid_ems = {{ manageiq.uid_ems }}"
-  - debug: msg="provider_href_slug = {{ manageiq.provider_href_slug }}"
+  - debug: msg="uid_ems = {{ uid_ems }}"
+  - debug: msg="provider_href_slug = {{ provider_href_slug }}"
 
   - name: Set the Service URL
     set_fact:
@@ -17,7 +17,7 @@
 
   - name: Set the Provider URL
     set_fact:
-      provider_url: "{{ manageiq.api_url }}/api/{{ manageiq.provider_href_slug }}"
+      provider_url: "{{ manageiq.api_url }}/api/{{ \provider_href_slug }}"
 
   - name: Register vms with the service
     uri:
@@ -25,7 +25,7 @@
       method: POST
       body:
         action: add_provider_vms
-        resource: "{ 'provider' : { 'href' :  {{ provider_url }} }, 'uid_ems' : [ {{ manageiq.uid_ems }} ] }"
+        resource: "{ 'provider' : { 'href' :  {{ provider_url }} }, 'uid_ems' : [ {{ uid_ems }} ] }"
       body_format: json
       validate_certs: False
       headers:
