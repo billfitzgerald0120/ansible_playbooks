@@ -27,9 +27,8 @@
           provider: 
             href: {{ provider_url }}
           uid_ems: 
-            [ {{ uid_ems }}]
+            - {{ uid_ems }}
   - debug: msg="payload = {{ payload }}"
-
 
   - name: Register vms with the service
     uri:
