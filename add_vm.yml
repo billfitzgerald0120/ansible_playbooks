@@ -43,8 +43,8 @@
       status_code: 200
     register: output
 
-  - debug: var=output.json.results[0].success
+  - debug: var=output.json.success
 
   - name: Check if the VM was successfully attached to service
-    fail: msg="{{ output.json.results[0].message }}"
-    when: output.json.results[0].success == false
+    fail: msg="{{ output.json.message }}"
+    when: output.json.success == false
