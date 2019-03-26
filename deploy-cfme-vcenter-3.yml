@@ -1,0 +1,106 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Locating file
+      find:
+        paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
+        patterns: "cfme-vsphere-{{ version }}*.vsphere.ova"
+      register: ova_image
+
+    - name: Deploying OVA File
+      vmware_deploy_ovf:
+        hostname: '{{ myhost }}'
+        username: '{{ redhatID }}'
+        password: '{{ redhatPass }}'
+        cluster: dev-vc67-cluster
+        datacenter: dev-vc67-DC
+        datastore: NFS Share
+        ovf: "{{ item.path }}"
+        allow_duplicates: no
+        validate_certs: no
+        name: '{{ newvm }}'
+        power_on: no
+      with_items: "{{ ova_image.files }}"
+      delegate_to: localhost
+
+    - name: Adding DB disk to appliance
+      vmware_guest_disk:
+        hostname: '{{ myhost }}'
+        username: '{{ redhatID }}'
+        password: '{{ redhatPass }}'
+        datacenter: dev-vc67-DC
+        name: '{{ newvm }}'
+        validate_certs: no
+        disk:
+        - size_gb: 100
+          state: present
+          scsi_controller: 2
+          unit_number: 1
+          type: thin
+          datastore: NFS Share
+
+    - name: Powering on appliance
+      vmware_guest:
+        hostname: '{{ myhost }}'
+        username: '{{ redhatID }}'
+        password: '{{ redhatPass }}'
+        validate_certs: no
+        name: '{{ newvm }}'
+        state: poweredon
+        wait_for_ip_address: True
+      delegate_to: localhost
+      register: deployInfo
+
+    - name: Gathering facts of appliance
+      setup:
+      register: moreInfo
+      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+
+    - name: Setting up DB on sdb
+      shell: appliance_console_cli --internal --dbdisk /dev/sdb --region 0 --password smartvm
+      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+      when: moreInfo.ansible_facts.ansible_devices.sda.size != '100.00 GB'
+
+    - name: Setting up DB on sda
+      shell: appliance_console_cli --internal --dbdisk /dev/sda --region 0 --password smartvm
+      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+      when: moreInfo.ansible_facts.ansible_devices.sdb.size != '100.00 GB'
+
+    - name: ManageIQ - Starting EVM service manually
+      shell: systemctl start evmserverd.service
+      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+
+    - debug:
+        msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
+
+    - name: Build body for Cloudforms
+      set_fact:
+        payload:
+          action: add_provider_vms
+          resource:
+            provider:
+              href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
+            uid_ems:
+              - "{{ deployInfo.instance.hw_product_uuid }}"
+    - debug: msg="payload = {{ payload }}"
+
+    - name: Register Vm with Cloudforms
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+        method: POST
+        body:  "{{ payload }}"
+        body_format: json
+        validate_certs: False
+        user: "{{ cfme_userid }}"
+        password: "{{ cfme_password }}"
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+      register: output
+
+    - debug: var=output.json.success
+
+    - name: Check if the VM was successfully attached to service
+      fail: msg="{{ output.json.message }}"
+      when: output.json.success == false
