@@ -1,0 +1,31 @@
+---
+- name: Build body for Cloudforms
+  hosts: localhost
+  set_fact:
+    payload:
+      action: add_provider_vms
+      resource:
+        provider:
+          href: "https://10.8.198.170/api/providers/2"
+        uid_ems:
+          - "423de046-50d2-1caf-cbc0-44c6e81c2db5"
+- debug: msg="payload = {{ payload }}"
+
+- name: Register Vm with Cloudforms
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+    method: POST
+    body:  "{{ payload }}"
+    body_format: json
+    validate_certs: False
+    user: "admin"
+    password: "smartvm"
+    headers:
+      Content-Type: "application/json"
+    status_code: 200
+  register: output
+
+- debug: var=output.json.success
+
+- name: Check if the VM was successfully attached to service
+  fail: msg="{{ output.json.message }}"
