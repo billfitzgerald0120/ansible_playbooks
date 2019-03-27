@@ -2,6 +2,11 @@
 - hosts: localhost
 
   tasks:
+  - name: Set the Service URL
+    set_fact:
+      svc_url: "/api/{{ manageiq.service }}"
+  - debug: var=svc_url
+
   - name: Build body for Cloudforms
     set_fact:
       payload:
@@ -15,7 +20,7 @@
 
   - name: Register Vm with Cloudforms
     uri:
-      url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+      url: "{{ manageiq.api_url }}/api/services"
       method: POST
       body:  "{{ payload }}"
       body_format: json
