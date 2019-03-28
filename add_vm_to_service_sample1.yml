@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+
+  tasks:
+  - name: Build body for Cloudforms take1
+    set_fact:
+      payload:
+        action: add_provider_vms
+        resource:
+          provider:
+            href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
+          uid_ems:
+            - "uid_ems"
+  - debug: msg="payload = {{ payload }}"
+
+  - name: Register Vm with Cloudforms
+    uri:
+      url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+      method: POST
+      body:  "{{ payload }}"
+      body_format: json
+      validate_certs: False
+      user: "{{ cfme_userid }}"
+      password: "{{ cfme_password }}"
+      headers:
+        Content-Type: "application/json"
+      status_code: 200
+    register: output
+
+  - debug: var=output.json.success
+
+  - name: Check if the VM was successfully attached to service
+    fail: msg="{{ output.json.message }}"
+    when: output.json.success == false
