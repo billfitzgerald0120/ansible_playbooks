@@ -10,7 +10,7 @@
           provider:
             href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
           uid_ems:
-            - "uid_ems"
+            - "{{ uid_ems }}"
   - debug: msg="payload = {{ payload }}"
 
   - name: Register Vm with Cloudforms
