@@ -22,7 +22,7 @@
         state: present
         cluster: Default
         name: "{{ newvm }}"
-        memory: 8GiB
+        memory: "{{ memorySize }}"
         cpu_cores: 2
         cpu_sockets: 2
         type: server
