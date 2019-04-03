@@ -1,0 +1,100 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Locating File
+      find: 
+        paths: "/builds/manageiq/{{ release }}/{{ version }}/"
+        patterns: "manageiq-ovirt*.qc2"
+      register: qcow2_image
+
+    - name: Log into RHV
+      ovirt_auth:
+        url: "https://{{ myhost }}/ovirt-engine/api"
+        insecure: true
+        username: "{{ redhatID }}"
+        password: "{{ redhatPass }}"
+        state: present
+
+    - name: Creating VM
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        state: present
+        cluster: Default
+        name: "{{ newvm }}"
+        memory: "{{ memorySize }}"
+        cpu_cores: 2
+        cpu_sockets: 2
+        type: server
+        operating_system: rhel_7x64
+        nics:
+          - name: nic1
+            profile_name: ovirtmgmt
+
+    - name: Import QCOW2 to disk on RHV
+      ovirt_disk:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ newvm }}_Disk1"
+        state: attached
+        vm_name: "{{ newvm }}"
+        interface: virtio
+        size: 100GiB
+        format: cow
+        image_path: "{{ item.path }}"
+        storage_domain: data
+      with_items: "{{ qcow2_image.files }}"
+
+    - name: Powering on Appliance
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ newvm }}"
+        state: running
+        wait: yes
+
+    - pause:
+        minutes: 1
+
+    - name: Gathering IP Info
+      ovirt_nic:
+        auth: "{{ ovirt_auth }}"
+        vm: "{{ newvm }}"
+        name: nic1
+      register: IPInfo
+
+    - name: Starting EVM service manually
+      shell: systemctl start evmserverd.service
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+
+    - debug: 
+        msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
+
+    - name: Build body for Cloudforms
+      set_fact:
+        payload:
+          action: add_provider_vms
+          resource:
+            provider:
+              href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
+            uid_ems:
+              - "{{ IPInfo.nic.vm.id }}"
+    - debug: msg="payload = {{ payload }}"
+
+    - name: Register Vm with Cloudforms
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+        method: POST
+        body:  "{{ payload }}"
+        body_format: json
+        validate_certs: False
+        user: "{{ cfme_userid }}"
+        password: "{{ cfme_password }}"
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+      register: output
+
+    - debug: var=output.json.success
+
+    - name: Check if the VM was successfully attached to service
+      fail: msg="{{ output.json.message }}"
+      when: output.json.success == false
