@@ -10,8 +10,8 @@
   tasks:
   - name: Debug Parameter Output
     debug:
-      var: input_field 
+      var: {{ input_field }} 
 
   - name: Debug Other Parameter Output
     debug:
-      var: input_field2
+      var: {{ input_field2 }}
