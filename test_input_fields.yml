@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+ 
+  vars:
+  - manageiq_validate_certs: False
+    
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+  - name: Debug Parameter Output
+    debug:
+      var: input_field 
+
+  - name: Debug Other Parameter Output
+    debug:
+      var: input_field2
