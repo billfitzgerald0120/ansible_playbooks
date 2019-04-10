@@ -1,0 +1,7 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, Fred and Barney
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello, {{ var1 }} and {{ var2 }}"
