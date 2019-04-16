@@ -4,4 +4,4 @@
   hosts: localhost
 
   tasks:
-  - debug: msg="Hello, ystream: {{ param_ystream }}, version: {{ param_version }},  newvm  : {{ param_newvm }}, memorySize : {{ param_memorySize }}"
+  - debug: msg="Hello, ystream: {{ ystream }}, version: {{ version }},  newvm  : {{ newvm }}, memorySize : {{ memorySize }}"
