@@ -4,4 +4,4 @@
   hosts: localhost
 
   tasks:
-  - debug: msg="Hello,  {{ ystream }}, {{ version }}, {{ service_name }}, {{ newvm }}, {{ memorySize }}, {{ service_retires_in_days }}, {{ provider_href_slug }}"
+  - debug: msg="Hello,  {{ ystream }}, {{ version }}, {{ myhost }}, {{ newvm }}, {{ memorySize }}, {{ cfme_userid }}, {{ provider_href_slug }}"
