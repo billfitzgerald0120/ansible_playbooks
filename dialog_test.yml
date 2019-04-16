@@ -1,0 +1,7 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, ystream, version, newvm , memorySize
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello, ystream: {{ param_ystream }}, version: {{ param_version }},  newvm  : {{ param_newvm }}, memorySize : {{ param_memorySize }}"
