@@ -43,7 +43,7 @@
         image_path: "{{ item.path }}"
         storage_domain: data
       with_items: "{{ qcow2_image.files }}"
-
+    
     - name: Powering on Appliance
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
