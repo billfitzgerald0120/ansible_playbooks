@@ -1,8 +1,8 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Getting file
-      shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
+          #- name: Getting file
+          #shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
     - name: Locating File
       find:
         paths: "/builds/manageiq/{{ release }}/{{ version }}/"
@@ -24,7 +24,7 @@
         power_on: no
       with_items: "{{ ova_image.files }}"
       delegate_to: localhost
-    
+
     - name: Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
@@ -43,8 +43,6 @@
         password: '{{ redhatPass }}'
         validate_certs: no
         name: '{{ newvm }}'
-        hardware:
-          memory_mb: "{{ memorySize }}"
         state: poweredon
         wait_for_ip_address: True
       delegate_to: localhost
