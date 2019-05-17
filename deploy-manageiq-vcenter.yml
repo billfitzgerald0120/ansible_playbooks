@@ -3,13 +3,13 @@
   tasks:
           #- name: Getting file
           #shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
-    - name: Locating File
+    - name: Step 1 - Locating File
       find:
         paths: "/builds/manageiq/{{ release }}/{{ version }}/"
         patterns: "manageiq-vsphere*.ova"
       register: ova_image
 
-    - name: Deploying OVA File
+    - name: Step 2 - Deploying OVA File
       vmware_deploy_ovf:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -25,7 +25,7 @@
       with_items: "{{ ova_image.files }}"
       delegate_to: localhost
     
-    - name: Adjusting memory size
+    - name: Step 3 - Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -36,7 +36,7 @@
           memory_mb: "{{ memorySize }}"
       delegate_to: localhost
 
-    - name: Powering on appliance
+    - name: Step 4 - Powering on appliance
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -48,19 +48,19 @@
       delegate_to: localhost
       register: deployInfo
 
-    - name: Gathering facts of appliance
+    - name: Step 5 - Gathering facts of appliance
       setup:
       register: moreInfo
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
 
-    - name: ManageIQ - Starting EVM service manually
+    - name: Step 6 - ManageIQ - Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
 
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
 
-    - name: Build body for Cloudforms
+    - name: Step 7 - Build body for Cloudforms
       set_fact:
         payload:
           action: add_provider_vms
@@ -71,7 +71,7 @@
               - "{{ deployInfo.instance.hw_product_uuid }}"
     - debug: msg="payload = {{ payload }}"
 
-    - name: Register Vm with Cloudforms
+    - name: Step 8 - Register Vm with Cloudforms
       uri:
         url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
         method: POST
@@ -87,6 +87,6 @@
 
     - debug: var=output.json.success
 
-    - name: Check if the VM was successfully attached to service
+    - name: Step 9 - Check if the VM was successfully attached to service
       fail: msg="{{ output.json.message }}"
       when: output.json.success == false
