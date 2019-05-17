@@ -38,7 +38,7 @@
         state: attached
         vm_name: "{{ newvm }}"
         interface: virtio
-        size: 120GiB
+        size: 100GiB
         format: cow
         image_path: "{{ item.path }}"
         storage_domain: data

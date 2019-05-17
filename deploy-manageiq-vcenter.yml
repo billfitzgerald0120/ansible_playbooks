@@ -24,7 +24,7 @@
         power_on: no
       with_items: "{{ ova_image.files }}"
       delegate_to: localhost
-
+    
     - name: Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'

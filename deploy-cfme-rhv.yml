@@ -78,50 +78,30 @@
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
 
     - name: Setting up DB on vdb
-      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
+      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password smartvm
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream != '5.10'
+      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB'
 
     - name: Setting up DB on vda
-      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
+      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password smartvm
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
+      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB'
 
-    - name: Setting up DB on vdb
-      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream == '5.10'
+#    - name: Copy DB Import Script
+#     copy:
+#       src: importdb.sh
+#       dest: /tmp/importdb.sh
+#       mode: u+x
+#     delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
 
-    - name: Setting up DB on vda
-      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream == '5.10'
+#    - name: Run DB Import Script
+#      shell: /tmp/importdb.sh
+#      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}' 
 
-    - name: Copy DB Import Script (for 5.9)
-      copy:
-        src: importdb46.sh
-        dest: /tmp/importdb.sh
-        mode: u+x
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: setup_DB == 'true' and ystream == '5.9'
-
-    - name: Copy DB Import Script (for 5.10)
-      copy:
-        src: importdb47.sh
-        dest: /tmp/importdb.sh
-        mode: u+x
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: setup_DB == 'true' and ystream == '5.10'
-
-    - name: Run DB Import Script
-      shell: /tmp/importdb.sh
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}' 
-      when: setup_DB == 'true'
 
     - name: Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: setup_DB != 'true'
 
     - debug: 
         msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
