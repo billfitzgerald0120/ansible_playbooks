@@ -3,13 +3,13 @@
   vars:
     ansible_python_interpreter: "/usr/libexec/platform-python"
   tasks:
-    - name: Step 1 - Locating File
+    - name: Locating File
       find:
         paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
         patterns: "cfme-rhevm*.qcow2"
       register: qcow2_image
 
-    - name: Step 2 - Log into RHV
+    - name: Log into RHV
       ovirt_auth:
         url: "https://{{ myhost }}/ovirt-engine/api"
         insecure: true
@@ -17,7 +17,7 @@
         password: "{{ redhatPass }}"
         state: present
 
-    - name: Step 3 - Creating VM
+    - name: Creating VM
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         state: present
@@ -32,7 +32,7 @@
           - name: nic1
             profile_name: ovirtmgmt
 
-    - name: Step 4 - Import QCOW2 to disk on RHV
+    - name: Import QCOW2 to disk on RHV
       ovirt_disk:
         auth: "{{ ovirt_auth }}"
         name: "{{ newvm }}_Disk1"
@@ -46,7 +46,7 @@
         bootable: True
       with_items: "{{ qcow2_image.files }}"
 
-    - name: Step 5 - Adding DB Disk
+    - name: Adding DB Disk
       ovirt_disk:
         auth: "{{ ovirt_auth }}"
         name: "{{ newvm }}_DB"
@@ -56,7 +56,7 @@
         size: 100GiB
         storage_domain: data
 
-    - name: Step 6 - Powering on Appliance
+    - name: Powering on Appliance
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ newvm }}"
@@ -66,48 +66,68 @@
     - pause:
         minutes: 1
 
-    - name: Step 7 - Gathering IP Info
+    - name: Gathering IP Info
       ovirt_nic:
         auth: "{{ ovirt_auth }}"
         vm: "{{ newvm }}"
         name: nic1
       register: IPInfo
 
-    - name: Step 8 - Gathering facts of appliance
+    - name: Gathering facts of appliance
       setup:
       register: moreInfo
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
 
-    - name: Step 9 - Setting up DB on vdb
-      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password smartvm
+    - name: Setting up DB on vdb
+      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB'
+      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream != '5.10'
 
-    - name: Step 10 - Setting up DB on vda
-      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password smartvm
+    - name: Setting up DB on vda
+      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB'
+      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
 
-#    - name: Copy DB Import Script
-#     copy:
-#       src: importdb.sh
-#       dest: /tmp/importdb.sh
-#       mode: u+x
-#     delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+    - name: Setting up DB on vdb
+      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream == '5.10'
 
-#    - name: Run DB Import Script
-#      shell: /tmp/importdb.sh
-#      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}' 
+    - name: Setting up DB on vda
+      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream == '5.10'
 
+    - name: Copy DB Import Script (for 5.9)
+      copy:
+        src: importdb46.sh
+        dest: /tmp/importdb.sh
+        mode: u+x
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      when: setup_DB == 'true' and ystream == '5.9'
 
-    - name: Step 11 - Starting EVM service manually
+    - name: Copy DB Import Script (for 5.10)
+      copy:
+        src: importdb47.sh
+        dest: /tmp/importdb.sh
+        mode: u+x
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      when: setup_DB == 'true' and ystream == '5.10'
+
+    - name: Run DB Import Script
+      shell: /tmp/importdb.sh
+      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}' 
+      when: setup_DB == 'true'
+
+    - name: Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      when: setup_DB != 'true'
 
     - debug: 
         msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
 
-    - name: Step 12 - Build body for Cloudforms
+    - name: Build body for Cloudforms
       set_fact:
         payload:
           action: add_provider_vms
@@ -118,7 +138,7 @@
               - "{{ IPInfo.nic.vm.id }}"
     - debug: msg="payload = {{ payload }}"
 
-    - name: Step 13 - Register Vm with Cloudforms
+    - name: Register Vm with Cloudforms
       uri:
         url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
         method: POST
@@ -134,6 +154,6 @@
 
     - debug: var=output.json.success
 
-    - name: Step 14 - Check if the VM was successfully attached to service
+    - name: Check if the VM was successfully attached to service
       fail: msg="{{ output.json.message }}"
       when: output.json.success == false
