@@ -2,13 +2,13 @@
 - hosts: localhost
 
   tasks:
-    - name: Step 1 - Locating file
+    - name: Locating file
       find:
         paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
         patterns: "cfme-vsphere-{{ version }}*.vsphere.ova"
       register: ova_image
 
-    - name: Step 2 - Deploying OVA File
+    - name: Deploying OVA File
       vmware_deploy_ovf:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -24,7 +24,7 @@
       with_items: "{{ ova_image.files }}"
       delegate_to: localhost
 
-    - name: Step 3 - Adding DB disk to appliance
+    - name: Adding DB disk to appliance
       vmware_guest_disk:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -40,7 +40,7 @@
           type: thin
           datastore: NFS Share
 
-    - name: Step 4 - Adjusting memory size
+    - name: Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -51,7 +51,7 @@
           memory_mb: "{{ memorySize }}"
       delegate_to: localhost
 
-    - name: Step 5 - Powering on appliance
+    - name: Powering on appliance
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ redhatID }}'
@@ -63,18 +63,18 @@
       delegate_to: localhost
       register: deployInfo
 
-    - name: Step 6 - Gathering facts of appliance
+    - name: Gathering facts of appliance
       setup:
       register: moreInfo
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
 
-    - name: Step 7 - Figure out which is the DB Disk
+    - name: Figure out which is the DB Disk
       set_fact:
         db_disk: "{{ item.key }}"
       with_dict: "{{ ansible_devices }}"
       when: item.value.size == '100.00 GB'
 
-    - name: Step 8 - Setting up DB on '{{ db_disk }}'
+    - name: Setting up DB on '{{ db_disk }}'
       shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 0 --password "{{ cfme_password }}"
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: ystream != '5.10'
@@ -85,7 +85,7 @@
       #      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
       #      ignore_errors: True
 
-    - name: Step 9 - Setting up DB on '{{ db_disk }} (for 5.10)
+    - name: Setting up DB on '{{ db_disk }} (for 5.10)
       shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 10 --password "{{ cfme_password }}"
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: ystream == '5.10'
@@ -96,7 +96,7 @@
       #      when: moreInfo.ansible_facts.ansible_devices.sdb.size != '100.00 GB' and ystream == '5.10'
       #      ignore_errors: True
 
-    - name: Step 10 - Copy DB Import Script (for 5.9)
+    - name: Copy DB Import Script (for 5.9)
       copy:
         src: importdb46.sh
         dest: /tmp/importdb.sh
@@ -104,7 +104,7 @@
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: setup_DB == 'true' and ystream == '5.9'
 
-    - name: Step 11 - Copy DB Import Script (for 5.10)
+    - name: Copy DB Import Script (for 5.10)
       copy:
         src: importdb47.sh
         dest: /tmp/importdb.sh
@@ -112,12 +112,12 @@
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: setup_DB == 'true' and ystream == '5.10'
 
-    - name: Step 12 - Run DB Import Script
+    - name: Run DB Import Script
       shell: /tmp/importdb.sh
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: setup_DB == 'true'
 
-    - name: Step 13 - Starting EVM service manually
+    - name: Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: setup_DB != 'true'
@@ -125,7 +125,7 @@
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
 
-    - name: Step 14 - Build body for Cloudforms
+    - name: Build body for Cloudforms
       set_fact:
         payload:
           action: add_provider_vms
@@ -136,7 +136,7 @@
               - "{{ deployInfo.instance.hw_product_uuid }}"
     - debug: msg="payload = {{ payload }}"
 
-    - name: Step 15 - Register Vm with Cloudforms
+    - name: Register Vm with Cloudforms
       uri:
         url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
         method: POST
@@ -152,6 +152,6 @@
 
     - debug: var=output.json.success
 
-    - name: Step 16 - Check if the VM was successfully attached to service
+    - name: Check if the VM was successfully attached to service
       fail: msg="{{ output.json.message }}"
       when: output.json.success == false
