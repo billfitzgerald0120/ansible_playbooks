@@ -64,7 +64,7 @@
         wait: yes
 
     - pause:
-        minutes: 4
+        minutes: 1
 
     - name: Gathering IP Info
       ovirt_nic:
