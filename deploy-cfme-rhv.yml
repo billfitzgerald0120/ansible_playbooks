@@ -67,7 +67,7 @@
         minutes: 1
 
     - name: Gathering IP Info
-      ovirt_nic_facts:
+      ovirt_nic:
         auth: "{{ ovirt_auth }}"
         vm: "{{ newvm }}"
         name: nic1
