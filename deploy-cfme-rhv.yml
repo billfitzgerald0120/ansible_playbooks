@@ -64,7 +64,7 @@
         wait: yes
 
     - pause:
-        minutes: 1
+        minutes: 5
 
     - name: Gathering IP Info
       ovirt_nic:
@@ -78,25 +78,41 @@
       register: moreInfo
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
 
-    - name: Setting up DB on vdb
-      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream != '5.10'
+    - name: Figure out which is the DB Disk
+      set_fact:
+        db_disk: "{{ item.key }}"
+      with_dict: "{{ ansible_devices }}"
+      when: item.value.size == '100.00 GB'
 
-    - name: Setting up DB on vda
-      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
+    - name: Setting up DB on '{{ db_disk }}'
+      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 0 --password "{{ cfme_password }}"
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
+      when: ystream != '5.10'
 
-    - name: Setting up DB on vdb
-      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
+    - name: Setting up DB on '{{ db_disk }} (for 5.10)
+      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 10 --password "{{ cfme_password }}"
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream == '5.10'
+      when: ystream == '5.10'
 
-    - name: Setting up DB on vda
-      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
-      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream == '5.10'
+      #    - name: Setting up DB on vdb
+      #      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
+      #      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      #      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream != '5.10'
+
+      #    - name: Setting up DB on vda
+      #      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
+      #      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      #      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
+
+      #    - name: Setting up DB on vdb
+      #      shell: appliance_console_cli --internal --dbdisk /dev/vdb --region 0 --password "{{ cfme_password }}"
+      #      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      #      when: moreInfo.ansible_facts.ansible_devices.vda.size != '100.00 GB' and ystream == '5.10'
+
+      #    - name: Setting up DB on vda
+      #      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
+      #      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+      #      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream == '5.10'
 
     - name: Copy DB Import Script (for 5.9)
       copy:
