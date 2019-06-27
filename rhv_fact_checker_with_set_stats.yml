@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Log into RHV
+      ovirt_auth:
+        url: "https://{{ myhost }}/ovirt-engine/api"
+        insecure: true
+        username: "{{ redhatID }}"
+        password: "{{ redhatPass }}"
+        state: present
+
+    - name: Gathering IP Info
+      ovirt_nic:
+        auth: "{{ ovirt_auth }}"
+        vm: "{{ newvm }}"
+        name: nic1
+      register: IPInfo
+
+      #    - name: Gathering facts of appliance
+      #      setup:
+      #      register: moreInfo
+      #      delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
+    - name: "Artifact data of test results to next playbook"
+      set_stats:
+        data:
+          ip_address: "{{ IPInfo }}"
+
+    - debug: msg="Hello, IPInfo is {{ IPInfo }}"
