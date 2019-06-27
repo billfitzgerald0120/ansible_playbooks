@@ -23,6 +23,7 @@
     - name: "Artifact data of test results to next playbook"
       set_stats:
         data:
-          ip_address: "{{ IPInfo }}"
+          vm_info: "{{ IPInfo }}"
+          ip_address: "{{ IPInfo.nic.reported_devices[0].ips[0].address }}"
 
-    - debug: msg="Hello, IPInfo is {{ IPInfo }}"
+    - debug: msg="Hello, ip_address is {{ IPInfo.nic.reported_devices[0].ips[0].address }}, vm_info is {{ IPInfo }}, "
