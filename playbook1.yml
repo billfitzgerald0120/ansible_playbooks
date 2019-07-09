@@ -4,9 +4,6 @@
   hosts: localhost
 
   tasks:
-  - debug: msg="Hello, {{ input1a }} and {{ input1b }}"
-
-
   - name: "playbook1 - testing input vars"
     set_stats:
       data:
