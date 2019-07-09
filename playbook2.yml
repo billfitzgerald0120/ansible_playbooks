@@ -7,8 +7,8 @@
   - name: "playbook2 - testing input vars"
     set_stats:
       data:
-        input2a: "{{ input2a }}"
-        input2b: "{{ input2b }}"
+        pb_var2a: "{{ input2a }}"
+        pb_var2b: "{{ input2b }}"
 
   - debug: msg="Hello, {{ input2a }} and {{ input2b }}"
  
