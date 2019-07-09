@@ -1,0 +1,14 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, Barney and Betty
+  hosts: localhost
+
+  tasks:
+  - name: "playbook2 - testing input vars"
+    set_stats:
+      data:
+        input2a: "{{ input2a }}"
+        input2b: "{{ input2b }}"
+
+  - debug: msg="Hello, {{ input2a }} and {{ input2b }}"
+ 
