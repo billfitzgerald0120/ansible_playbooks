@@ -4,7 +4,7 @@
   hosts: localhost
 
   tasks:
-  - name: "playbook2 - testing input vars"
+  - name: "playbook3 - testing input vars"
     set_stats:
       data:
         pb_var3a: "{{ input3a }}"
