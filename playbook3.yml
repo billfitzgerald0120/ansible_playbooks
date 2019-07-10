@@ -11,4 +11,4 @@
         pb_var3b: "{{ input3b }}"
 
   - debug: msg="Hello, {{ input3a }} and {{ input3b }}"
- 
+  - debug: msg="Values from playbook2(ansible_stats_pb_var2a: {{ ansible_stats_pb_var2a }} and ansible_stats_pb_var2b: {{ ansible_stats_pb_var2b }})"
