@@ -10,4 +10,4 @@
         pb_var3a: "{{ input3a }}"
         pb_var3b: "{{ input3b }}"
 
-  - debug: msg="Hello, {{ input3a }} and {{ input3b }}.  Values from previous playbook2(pb_var2a: {{ pb_var2a }} and pb_var2b: {{ pb_var2b }})"
+  - debug: msg="Hello, {{ input3a }} and {{ input3b }}.  Values from previous playbook2 pb_var2a: {{ pb_var2a }} and pb_var2b: {{ pb_var2b }}"
