@@ -12,8 +12,8 @@
     - name: Step 2 - Deploying OVA File
       vmware_deploy_ovf:
         hostname: '{{ myhost }}'
-        username: '{{ VMWARE_USER }}'
-        password: '{{ VMWARE_PASSWORD }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         cluster: dev-vc67-cluster
         datacenter: dev-vc67-DC
         datastore: NFS Share
@@ -28,8 +28,8 @@
     - name: Step 3 - Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
-        username: '{{ VMWARE_USER }}'
-        password: '{{ VMWARE_PASSWORD }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: no
         name: '{{ newvm }}'
         hardware:
@@ -39,8 +39,8 @@
     - name: Step 4 - Powering on appliance
       vmware_guest:
         hostname: '{{ myhost }}'
-        username: '{{ VMWARE_USER }}'
-        password: '{{ VMWARE_PASSWORD }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: no
         name: '{{ newvm }}'
         state: poweredon
