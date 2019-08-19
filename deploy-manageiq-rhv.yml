@@ -12,8 +12,8 @@
       ovirt_auth:
         url: "https://{{ myhost }}/ovirt-engine/api"
         insecure: true
-        username: "{{ ovirt_username }}"
-        password: "{{ ovirt_password }}"
+        username: "{{ OVIRT_USERNAME }}"
+        password: "{{ OVIRT_PASSWORD }}"
         state: present
 
     - name: Step 3 - Creating VM
@@ -43,7 +43,7 @@
         image_path: "{{ item.path }}"
         storage_domain: data
       with_items: "{{ qcow2_image.files }}"
-    
+
     - name: Step 5 - owering on Appliance
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
