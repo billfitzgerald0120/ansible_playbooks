@@ -12,8 +12,8 @@
       ovirt_auth:
         url: "https://{{ myhost }}/ovirt-engine/api"
         insecure: true
-        username: "{{ lookup("env", "VMWARE_USER") }}"
-        password: "{{ lookup("env", "VMWARE_PASSWORD") }}"
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         state: present
 
     - name: Step 3 - Creating VM
