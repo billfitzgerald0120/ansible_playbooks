@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   vars:
-    ansible_python_interpreter: "/usr/libexec/platform-python"
+    ansible_python_interpreter: "{{ '/usr/libexec/platform-python' if ystream != '5.8' else '/usr/bin/python'}}"
   tasks:
     - name: Locating file
       find:
@@ -12,8 +12,8 @@
     - name: Deploying OVA File
       vmware_deploy_ovf:
         hostname: '{{ myhost }}'
-        username: '{{ redhatID }}'
-        password: '{{ redhatPass }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         cluster: dev-vc67-cluster
         datacenter: dev-vc67-DC
         datastore: NFS Share
@@ -28,8 +28,8 @@
     - name: Adding DB disk to appliance
       vmware_guest_disk:
         hostname: '{{ myhost }}'
-        username: '{{ redhatID }}'
-        password: '{{ redhatPass }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         datacenter: dev-vc67-DC
         name: '{{ newvm }}'
         validate_certs: no
@@ -44,8 +44,8 @@
     - name: Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
-        username: '{{ redhatID }}'
-        password: '{{ redhatPass }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: no
         name: '{{ newvm }}'
         hardware:
@@ -55,8 +55,8 @@
     - name: Powering on appliance
       vmware_guest:
         hostname: '{{ myhost }}'
-        username: '{{ redhatID }}'
-        password: '{{ redhatPass }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: no
         name: '{{ newvm }}'
         state: poweredon
