@@ -10,10 +10,10 @@
 
     - name: Step 2 - Log into RHV
       ovirt_auth:
-        url: "https://{{ myhost }}/ovirt-engine/api"
+        url: '{{ lookup("env", "OVIRT_URL") }}'
         insecure: true
-        username: "{{ OVIRT_USERNAME }}"
-        password: "{{ OVIRT_PASSWORD }}"
+        username: '{{ lookup("env", "OVIRT_USERNAME") }}'
+        password: '{{ lookup("env", "OVIRT_PASSWORD") }}'
         state: present
 
     - name: Step 3 - Creating VM
