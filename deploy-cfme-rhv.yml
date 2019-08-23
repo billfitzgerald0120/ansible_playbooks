@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   vars:
-    ansible_python_interpreter: "/usr/libexec/platform-python"
+    ansible_python_interpreter: "{{ '/usr/libexec/platform-python' if ystream != '5.8' else '/usr/bin/python'}}"
   tasks:
     - name: Locating File
       find:
@@ -13,8 +13,8 @@
       ovirt_auth:
         url: "https://{{ myhost }}/ovirt-engine/api"
         insecure: true
-        username: "{{ redhatID }}"
-        password: "{{ redhatPass }}"
+        username: '{{ lookup("env", "OVIRT_USERNAME") }}'
+        password: '{{ lookup("env", "OVIRT_PASSWORD") }}'
         state: present
 
     - name: Creating VM
