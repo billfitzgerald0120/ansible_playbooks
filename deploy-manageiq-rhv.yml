@@ -10,7 +10,7 @@
 
     - name: Step 2 - Log into RHV
       ovirt_auth:
-        url: '{{ lookup("env", "OVIRT_URL") }}'
+        url: "https://{{ myhost }}/ovirt-engine/api"
         insecure: true
         username: '{{ lookup("env", "OVIRT_USERNAME") }}'
         password: '{{ lookup("env", "OVIRT_PASSWORD") }}'
