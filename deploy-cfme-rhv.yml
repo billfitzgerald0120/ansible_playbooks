@@ -161,8 +161,8 @@
         body:  "{{ payload }}"
         body_format: json
         validate_certs: False
-        user: "{{ ansible_user }}"
-        password: "{{ ansible_password }}"
+        user: "{{ cfme_userid }}"
+        password: "{{ cfme_password }}"
         headers:
           Content-Type: "application/json"
         status_code: 200
