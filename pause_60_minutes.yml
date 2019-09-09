@@ -1,0 +1,8 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, world!
+  hosts: localhost
+
+  tasks:
+  - pause: minutes=60
+  - debug: msg="Hello, world!"

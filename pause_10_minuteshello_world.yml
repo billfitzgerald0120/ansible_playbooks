@@ -1,0 +1,10 @@
+---
+# This playbook pauses 10 minutes and then prints a simple debug message
+# Pause for 10 minutes
+- pause:
+    minutes: 10
+- name: Echo Hello, world!
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello, world!"
