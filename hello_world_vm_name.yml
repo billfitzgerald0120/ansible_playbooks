@@ -1,0 +1,7 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, vm_name value from input_vars
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello,  {{ vm_name }} "
