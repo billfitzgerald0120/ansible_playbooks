@@ -1,0 +1,14 @@
+---
+# This sets some ansible stat variables
+- name: set_stats
+  hosts: localhost
+
+  tasks:
+    - name: "Artifact data of test results to next playbook"
+      set_stats:
+        data:
+          miq_attrs: "something"
+          ip_address: "1.2.3.4"
+          service_template_provision_task__status: "Warn"
+          service_template_provision_task__options__config_info__be__very__deep: true
+ 
