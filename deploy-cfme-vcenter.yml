@@ -6,7 +6,7 @@
     - name: Locating file
       find:
         paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
-        patterns: "cfme-vsphere-{{ version }}*.vsphere.ova"
+        patterns: "{{ cfme_vsphere }}{{ version }}*.vsphere.ova"
       register: ova_image
 
     - name: Deploying OVA File
@@ -99,7 +99,7 @@
 
     - name: Copy DB Import Script (for 5.9)
       copy:
-        src: importdb46.sh
+        src: /cfmt/importdb46.sh
         dest: /tmp/importdb.sh
         mode: u+x
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
@@ -107,7 +107,7 @@
 
     - name: Copy DB Import Script (for 5.10)
       copy:
-        src: importdb47.sh
+        src: /cfmt/importdb47.sh
         dest: /tmp/importdb.sh
         mode: u+x
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
