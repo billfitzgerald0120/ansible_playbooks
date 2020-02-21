@@ -6,7 +6,10 @@
     - name: Locating file
       find:
         paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
-        patterns: "cfme-vsphere-{{ version }}*.vsphere.ova"
+        patterns: "{{ cfme_vsphere }}{{ version }}*.vsphere.ova"
+        # patterns: "cfme-vsphere-{{ version }}*.vsphere.ova"
+
+        
       register: ova_image
 
     - name: Deploying OVA File
