@@ -48,6 +48,9 @@
       delegate_to: localhost
       register: deployInfo
 
+    - debug:
+        msg: "Step 4 - Powering on appliance debug your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}"
+
     - name: Step 5 - Gathering facts of appliance
       setup:
       register: moreInfo
