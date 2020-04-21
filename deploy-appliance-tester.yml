@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
-  vars:
-    ansible_python_interpreter: "{{ '/usr/bin/python' if release != 'jansa' else '/usr/bin/python3.6'}}"
+  # vars:
+    # ansible_python_interpreter: "{{ '/usr/bin/python' if release != 'jansa' else '/usr/bin/python3.6'}}"
   tasks:
           #- name: Getting file
           #shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
@@ -53,13 +53,13 @@
     - debug:
         msg: "Step 4 - Powering on appliance debug your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}"
 
-    - name: Step 5 - Gathering facts of appliance
-      setup:
-      register: moreInfo
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+    #- name: Step 5 - Gathering facts of appliance
+    #  setup:
+    #  register: moreInfo
+    #  delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
 
-    - debug:
-        msg: "Step 5 - Gathering facts of appliance debug your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}"
+    #- debug:
+    #    msg: "Step 5 - Gathering facts of appliance debug your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}"
 
     - name: Step 6 - ManageIQ - Starting EVM service manually
       shell: systemctl start evmserverd.service
