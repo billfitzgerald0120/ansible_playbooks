@@ -1,0 +1,18 @@
+---
+# Takes 3 parameters that can be passed in as --extra-vars
+# This playbook is for Fedors, CentOS, Redhat
+#
+# host => stores the host where the command should be run
+# sleep => how long to sleep in seconds
+# pkg   => The name of the package to list
+#
+# ansible-playbook pkginfo.yml --ask-pass --extra-vars "pkg=httpd sleep=2 user=billy"
+#
+  - hosts: all 
+    gather_facts: no
+    tasks:
+    - shell: sleep '{{ sleep }}'
+    - shell: yum info '{{ pkg }}'
+      register: yum_output
+
+    - debug: msg="the yum output was {{ yum_output.stdout }}"
