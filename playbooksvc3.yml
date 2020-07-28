@@ -1,0 +1,14 @@
+---
+# This playbook prints a simple debug message for service_var_
+- name: Echo Hello, Pebbles and BamBam
+  hosts: localhost
+
+  tasks:
+  - name: "playbooksvc3 - testing input vars with service_var_"
+    set_stats:
+      data:
+        service_var__var3a: "{{ input3a }}"
+        service_var__var3b: "{{ input3b }}"
+
+  - debug: msg="Hello, {{ input3a }} and {{ input3b }}"
+ 

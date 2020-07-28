@@ -7,8 +7,8 @@
   - name: "playbooksvc1 - testing service_var__var1a vars"
     set_stats:
       data:
-        service_var__var1a: "Fred"
-        service_var__var1b: "Wilma"
+        service_var__var1a: "{{ input1a }}"
+        service_var__var1b: "{{ input1b }}"
 
-  - debug: msg="Hello, Fred and Wilma"
+  - debug: msg="Hello, {{ input1a }} and {{ input1b }}"
  
