@@ -7,8 +7,8 @@
   - name: "playbooksvc1 - testing service_var__var1a vars"
     set_stats:
       data:
-        ansible_stats_service_var__var1a: "Fred"
-        ansible_stats_service_var__var1b: "Wilma"
+        service_var__var1a: "Fred"
+        service_var__var1b: "Wilma"
 
   - debug: msg="Hello, Fred and Wilma"
  
