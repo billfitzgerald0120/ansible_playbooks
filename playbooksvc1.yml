@@ -1,0 +1,14 @@
+---
+# This playbook prints a simple debug message from service_vars(s) 
+- name: Echo Hello, Fred and Wilma
+  hosts: localhost
+
+  tasks:
+  - name: "playbooksvc1 - testing service_var__var1a vars"
+    set_stats:
+      data:
+        ansible_stats_service_var__var1a: "{{ Fred }}"
+        ansible_stats_service_var__var1b: "{{ Wilma }}"
+
+  - debug: msg="Hello, {{ ansible_stats_service_var__var1a }} and {{ ansible_stats_service_var__var1b }}"
+ 
