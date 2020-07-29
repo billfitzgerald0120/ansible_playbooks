@@ -14,7 +14,7 @@
         service_var__var5: "Pebbles"
         service_var__var6: "BamBam"
 
-  - debug: msg="Hello, {{ var1 }} and {{ var2 }}"
-  - debug: msg="Hello, {{ var3 }} and {{ var4 }}"
-  - debug: msg="Hello, {{ var5 }} and {{ var6 }}"
+  - debug: msg="Hello, Fred and Barney"
+#  - debug: msg="Hello, {{ var3 }} and {{ var4 }}"
+#  - debug: msg="Hello, {{ var5 }} and {{ var6 }}"
 # - debug: var=vars
