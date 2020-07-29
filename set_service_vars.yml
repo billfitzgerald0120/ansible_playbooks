@@ -1,0 +1,20 @@
+---
+# This playbook sets 6 vars using service_var_
+- name: Echo Hello, Set all 6 Service vars
+  hosts: localhost
+
+  tasks:
+  - name: "set_service_vars - Set all 6 Service vars with service_var_"
+    set_stats:
+      data:
+        service_var__var1: "Fred"
+        service_var__var2: "Wilma"
+        service_var__var3: "Barney"
+        service_var__var4: "Betty"
+        service_var__var5: "Pebbles"
+        service_var__var6: "BamBam"
+
+  - debug: msg="Hello, {{ var1 }} and {{ var2 }}"
+  - debug: msg="Hello, {{ var3 }} and {{ var4 }}"
+  - debug: msg="Hello, {{ var5 }} and {{ var6 }}"
+# - debug: var=vars
