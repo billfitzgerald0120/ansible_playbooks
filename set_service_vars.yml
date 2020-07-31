@@ -14,8 +14,8 @@
         service_var__var5: "Pebbles"
         service_var__var6: "BamBam"
         var13: "playbook set stat value for var13"
-		var14: "playbook set stat value for var14"
-		var15: "playbook set stat value for var15"
+        var14: "playbook set stat value for var14"
+        var15: "playbook set stat value for var15"
 
   - debug: msg="Hello, Fred and Barney"
 #  - debug: msg="Hello, {{ var3 }} and {{ var4 }}"
