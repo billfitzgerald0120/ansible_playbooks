@@ -1,0 +1,21 @@
+---
+#
+# Shows the value of all variables/facts.
+#
+# Example:
+#
+#   ansible-runner -p projects/vars_stats.yml -i vars_1 --cmdline "--extra-vars miq_data='from-command-line'" --debug  run /tmp/private
+#
+- hosts: localhost
+  tasks:
+    - name: "Artifact data of test results to next playbook"
+      set_stats:
+        data:
+          miq_attrs: "something"
+          ip_address: "1.2.3.4"
+          service_template_provision_task__message: "set from playbook"
+          service_template_provision_task__options__info: "set from playbook"
+          service_var__info: "variable set from playbook"
+
+    - debug: var=miq_data
+    - debug: var=vars
