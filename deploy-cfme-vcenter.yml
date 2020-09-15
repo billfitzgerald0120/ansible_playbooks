@@ -64,6 +64,9 @@
       delegate_to: localhost
       register: deployInfo
 
+    - pause:
+        minutes: 5
+
     - name: Gathering facts of appliance
       setup:
       register: moreInfo
