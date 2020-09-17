@@ -78,8 +78,8 @@
       with_dict: "{{ ansible_devices }}"
       when: item.value.size == '100.00 GB'
 
-    - name: Setting up DB on '{{ db_disk }}'
-      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 0 --password "{{ cfme_password }}"
+    - name: Setting up DB on '{{ db_disk }}' adding username to cli
+      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 0 --username "{{ cfme_userid }}" --password "{{ cfme_password }}"
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
       when: ystream != '5.10'
 
