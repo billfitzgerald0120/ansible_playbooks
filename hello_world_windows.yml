@@ -1,0 +1,9 @@
+---
+# This playbook prints a simple debug message
+- name: Echo Hello, world!
+  hosts: all
+  vars:
+    ansible_port: '5986'
+
+  tasks:
+  - debug: msg="Hello, world!"
