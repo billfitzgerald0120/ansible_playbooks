@@ -1,0 +1,7 @@
+---
+# This playbook uses a host group called win
+- name: Echo Hello, world!
+  hosts: win
+
+  tasks:
+  - debug: msg="Hello, world!"
