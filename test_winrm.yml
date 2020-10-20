@@ -1,0 +1,20 @@
+---
+# This playbook prints a simple debug message from localhost and then try to connect using winrm 
+- name: Echo Hello, world!
+  hosts: localhost
+
+  tasks:
+  - debug: msg="Hello, world! localhost"
+
+  # This playbook prints a simple debug message
+- name: Echo Hello, world!
+  hosts: 40.69.157.221
+  vars:
+    ansible_port: '5986'
+    ansible_connection: 'winrm'
+    ansible_winrm_transport: 'ssl'
+    ansible_winrm_server_cert_validation: 'ignore'
+
+
+  tasks:
+  - debug: msg="Hello, world! windows machine"
