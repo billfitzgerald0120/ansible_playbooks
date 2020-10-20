@@ -8,10 +8,10 @@
 
   # This playbook prints a simple debug message
 - name: Echo Hello, world!
-  hosts: 40.69.157.221
+  hosts: all
   vars:
-    ansible_user: dberger
-    ansible_password: Smartvm12345
+    ansible_user: username
+    ansible_password: password
     ansible_port: '5986'
     ansible_connection: 'winrm'
     ansible_winrm_transport: 'ssl'
