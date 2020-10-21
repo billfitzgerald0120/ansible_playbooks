@@ -10,8 +10,8 @@
 - name: Ping
   hosts: 40.69.157.221
   vars:
-    ansible_user: dberger
-    ansible_password: Smartvm12345
+    ansible_user: '{{ winrm_user }}'
+    ansible_password: '{{ winrm_password }}'
     ansible_port: '5986'
     ansible_connection: 'winrm'
     ansible_winrm_transport: 'ssl'
