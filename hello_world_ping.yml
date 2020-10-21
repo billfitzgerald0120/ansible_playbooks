@@ -8,7 +8,7 @@
 
 # This playbook uses the win_ping module to test connectivity to Windows hosts
 - name: Ping
-  hosts: 40.69.157.221
+  hosts: '{{ winrm_host }}'
   vars:
     ansible_user: '{{ winrm_user }}'
     ansible_password: '{{ winrm_password }}'
