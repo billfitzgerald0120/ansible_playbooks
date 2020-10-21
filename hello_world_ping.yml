@@ -10,6 +10,8 @@
 - name: Ping
   hosts: all
   vars:
+    ansible_user: dberger
+    ansible_password: Smartvm12345
     ansible_port: '5986'
     ansible_connection: 'winrm'
     ansible_winrm_transport: 'ssl'
