@@ -17,16 +17,17 @@
     ansible_password: '{{ winrm_password }}'
     ansible_winrm_server_cert_validation: 'ignore'      
 
-# This playbook uses the win_ping module to test connectivity to Windows hosts
-- name: Ping
-  hosts: hosts_to_patch
-  vars:
-    ansible_user: '{{ winrm_user }}'
-    ansible_password: '{{ winrm_password }}'
-    ansible_port: '5986'
-    ansible_connection: 'winrm'
-    ansible_winrm_transport: 'ssl'
-    ansible_winrm_server_cert_validation: 'ignore'
+# This playbook step uses the win_ping module to test connectivity to Windows hosts identified above
+  tasks:
+  - name: Ping
+    hosts: hosts_to_patch
+    vars:
+      ansible_user: '{{ winrm_user }}'
+      ansible_password: '{{ winrm_password }}'
+      ansible_port: '5986'
+      ansible_connection: 'winrm'
+      ansible_winrm_transport: 'ssl'
+      ansible_winrm_server_cert_validation: 'ignore'
 
   tasks:
   - name: ping
