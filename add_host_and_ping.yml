@@ -7,15 +7,15 @@
   - debug: msg="Hello, world! localhost"
 
 - name: Add host to inventory
-    add_host:
-      name: '{{ winrm_host }}'
-      groups: hosts_to_patch
-      ansible_port: '5986'
-      ansible_connection: 'winrm'
-      ansible_winrm_transport: 'ssl'
-      ansible_user: '{{ winrm_user }}'
-      ansible_password: '{{ winrm_password }}'
-      ansible_winrm_server_cert_validation: 'ignore'      
+  add_host:
+    name: '{{ winrm_host }}'
+    groups: hosts_to_patch
+    ansible_port: '5986'
+    ansible_connection: 'winrm'
+    ansible_winrm_transport: 'ssl'
+    ansible_user: '{{ winrm_user }}'
+    ansible_password: '{{ winrm_password }}'
+    ansible_winrm_server_cert_validation: 'ignore'      
 
 # This playbook uses the win_ping module to test connectivity to Windows hosts
 - name: Ping
