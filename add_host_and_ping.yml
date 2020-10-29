@@ -1,14 +1,15 @@
 ---
-# This playbook prints a simple debug message from localhost and then connects using winrm 
-- name: Echo Hello, world!
-  hosts: all
+# This playbook creates a host group and then connects using winrm 
+# - name: Echo Hello, world!
+- hosts: all
+  connection: winrm
 
   tasks:
   #- debug: msg="Hello, world! localhost"
   - name: Add host to inventory
     add_host:
       name: '{{ winrm_host }}'
-      groups: hosts_to_patch
+      groups: 'hosts_to_patch'
       ansible_port: '5986'
       ansible_connection: 'winrm'
       ansible_winrm_transport: 'ssl'
@@ -17,17 +18,11 @@
       ansible_winrm_server_cert_validation: 'ignore'      
 
 # This playbook step uses the win_ping module to test connectivity to Windows hosts identified above
-  tasks:
-  - name: Ping
-    hosts: hosts_to_patch
-    vars:
-      ansible_user: '{{ winrm_user }}'
-      ansible_password: '{{ winrm_password }}'
-      ansible_port: '5986'
-      ansible_connection: 'winrm'
-      ansible_winrm_transport: 'ssl'
-      ansible_winrm_server_cert_validation: 'ignore'
+- hosts: hosts_to_patch
 
-  tasks:
-  - name: ping
-    win_ping:
+tasks:
+- name: "Wait for connection to VM"
+  wait_for_connection:
+    timeout: 300
+
+- win_ping:
