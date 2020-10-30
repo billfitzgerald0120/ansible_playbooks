@@ -1,0 +1,15 @@
+---
+# This playbook uses a host group and then connects using winrm 
+# - name: Echo Hello, world!
+- hosts: hosts_to_patch
+  connection: winrm
+
+# This playbook step uses the win_ping module to test connectivity to Windows hosts identified above
+- hosts: hosts_to_patch
+
+  tasks:
+  - name: "Wait for connection to VM"
+    wait_for_connection:
+      timeout: 300
+
+  - win_ping:
