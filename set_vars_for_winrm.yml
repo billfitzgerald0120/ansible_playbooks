@@ -1,0 +1,19 @@
+---
+# This playbook Set input vars for building a winrm connection with service_vars 
+# - name: Echo Hello, world!
+- hosts: localhost
+  # connection: winrm
+  tasks:
+  - name: "Set input vars for next step"
+    set_stats:
+      data:
+        my_ip: "{{ winrm_host }}"
+        ansible_port: '5986'
+        ansible_connection: 'winrm'
+        ansible_winrm_transport: 'ssl'
+        ansible_user: '{{ winrm_user }}'
+        ansible_password: '{{ winrm_password }}'
+        ansible_winrm_server_cert_validation: 'ignore'
+
+  - debug: msg="Hello, {{ winrm_host }} and {{ winrm_user }}."
+# - debug: var=vars
