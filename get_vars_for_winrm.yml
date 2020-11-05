@@ -1,7 +1,8 @@
 ---
 # This playbook uses the win_ping module to test connectivity using set_vars
 - name: Ping
-  hosts: "{{ my_ip }}"
+  # hosts: "{{ my_ip }}"
+  hosts: 40.69.157.221
   vars:
     ansible_user: '{{ winrm_user }}'
     ansible_password: '{{ winrm_password }}'
