@@ -1,0 +1,22 @@
+---
+- name: Set root attribute
+  hosts: localhost
+  connection: local
+  vars:
+  - object: root
+
+  gather_facts: False
+  roles:
+  - syncrou.manageiq-automate
+
+  tasks:
+    - name: "Set my_name var in root"
+      manageiq_automate:
+        workspace: "{{ workspace }}"
+        set_attribute:
+          object: "root"
+          attribute: "winrm_host"
+          value:  "40.69.157.221"
+      register: attribute
+
+    - debug: msg="set root attribute:{{ attribute }}"
