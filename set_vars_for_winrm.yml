@@ -7,7 +7,7 @@
   - name: "Set input vars for next step"
     set_stats:
       data:
-        service_var__my_ip: "40.69.157.221"
+        service_var__host_ip: "40.69.157.221"
         host_ip: "40.69.157.221"
 
 #  - debug: msg="Hello, {{ winrm_host }}."
