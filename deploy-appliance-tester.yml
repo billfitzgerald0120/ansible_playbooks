@@ -1,15 +1,15 @@
 ---
 - hosts: localhost
-  vars:
-    ansible_python_interpreter: "{{ '/usr/libexec/platform-python' if ystream != '5.8' else '/usr/bin/python'}}"
   tasks:
-    - name: Locating file
+          #- name: Getting file
+          #shell: "cp /builds/manageiq/{{ release }}/{{ version }}/manageiq-vsphere*.ova {{ version }}.ova"
+    - name: Step 1 - Locating File
       find:
-        paths: "/builds/cfme/{{ ystream }}/{{ version }}/"
-        patterns: "{{ cfme_vsphere }}{{ version }}*.vsphere.ova"
+        paths: "/builds/manageiq/{{ release }}/{{ version }}/"
+        patterns: "manageiq-vsphere*.ova"
       register: ova_image
 
-    - name: Deploying OVA File
+    - name: Step 2 - Deploying OVA File
       vmware_deploy_ovf:
         hostname: '{{ myhost }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
@@ -25,23 +25,7 @@
       with_items: "{{ ova_image.files }}"
       delegate_to: localhost
 
-    - name: Adding DB disk to appliance
-      vmware_guest_disk:
-        hostname: '{{ myhost }}'
-        username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-        datacenter: dev-vc67-DC
-        name: '{{ newvm }}'
-        validate_certs: no
-        disk:
-        - size_gb: 100
-          state: present
-          scsi_controller: 2
-          unit_number: 1
-          type: thin
-          datastore: NFS Share
-
-    - name: Adjusting memory size
+    - name: Step 3 - Adjusting memory size
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
@@ -52,7 +36,7 @@
           memory_mb: "{{ memorySize }}"
       delegate_to: localhost
 
-    - name: Powering on appliance
+    - name: Step 4 - Powering on appliance
       vmware_guest:
         hostname: '{{ myhost }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
@@ -64,98 +48,11 @@
       delegate_to: localhost
       register: deployInfo
 
-    - pause:
-        minutes: 5
+    - name: "Set host ip"
+      set_stats:
+        data:
+          service_var__host_ip: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
+          host_ip: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
 
-    - name: Gathering facts of appliance
-      setup:
-      register: moreInfo
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-
-    - name: Figure out which is the DB Disk
-      set_fact:
-        db_disk: "{{ item.key }}"
-      with_dict: "{{ ansible_devices }}"
-      when: item.value.size == '100.00 GB'
-
-    - name: Setting up DB on '{{ db_disk }}' adding username to cli
-      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 0 --username "{{ cfme_userid }}" --password "{{ cfme_password }}"
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: ystream != '5.10'
-
-      #    - name: Setting up DB on vda
-      #      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 0 --password "{{ cfme_password }}"
-      #      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      #      when: moreInfo.ansible_facts.ansible_devices.vdb.size != '100.00 GB' and ystream != '5.10'
-      #      ignore_errors: True
-
-    - name: Setting up DB on '{{ db_disk }} (for 5.10)
-      shell: appliance_console_cli --internal --dbdisk /dev/"{{ db_disk }}" --region 10 --password "{{ cfme_password }}"
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: ystream == '5.10'
-
-      #    - name: Setting up DB on vda (for 5.10)
-      #      shell: appliance_console_cli --internal --dbdisk /dev/vda --region 10 --password "{{ cfme_password }}"
-      #      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      #      when: moreInfo.ansible_facts.ansible_devices.sdb.size != '100.00 GB' and ystream == '5.10'
-      #      ignore_errors: True
-
-    - name: Copy DB Import Script (for 5.9)
-      copy:
-        src: /cfmt/importdb46.sh
-        dest: /tmp/importdb.sh
-        mode: u+x
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: setup_DB == 'true' and ystream == '5.9'
-
-    - name: Copy DB Import Script (for 5.10)
-      copy:
-        src: /cfmt/importdb47.sh
-        dest: /tmp/importdb.sh
-        mode: u+x
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: setup_DB == 'true' and ystream == '5.10'
-
-    - name: Run DB Import Script
-      shell: /tmp/importdb.sh
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: setup_DB == 'true'
-
-    - name: Starting EVM service manually
-      shell: systemctl start evmserverd.service
-      delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: setup_DB != 'true'
-
-    - debug:
-        msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
-
-    - name: Build body for Cloudforms
-      set_fact:
-        payload:
-          action: add_provider_vms
-          resource:
-            provider:
-              href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
-            uid_ems:
-              - "{{ deployInfo.instance.hw_product_uuid }}"
-    - debug: msg="payload = {{ payload }}"
-
-    - name: Register Vm with Cloudforms
-      uri:
-        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
-        method: POST
-        body:  "{{ payload }}"
-        body_format: json
-        validate_certs: False
-        user: "{{ cfme_userid }}"
-        password: "{{ cfme_password }}"
-        headers:
-          Content-Type: "application/json"
-        status_code: 200
-      register: output
-
-    - debug: var=output.json.success
-
-    - name: Check if the VM was successfully attached to service
-      fail: msg="{{ output.json.message }}"
-      when: output.json.success == false
+#  - debug: msg="Hello, {{ input_host }}."
+# - debug: var=vars
