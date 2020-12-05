@@ -61,7 +61,6 @@
 
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
-        when: release != 'jansa'
     - name: Step 7 - Build body for Cloudforms
       set_fact:
         payload:
@@ -74,7 +73,6 @@
       when: release != 'jansa'
 
     - debug: msg="payload = {{ payload }}"
-      when: release != 'jansa'
 
     - name: Step 8 - Register Vm with Cloudforms
       uri:
@@ -92,7 +90,6 @@
       when: release != 'jansa'
 
     - debug: var=output.json.success
-      when: release != 'jansa'
 
     - name: Step 9 - Check if the VM was successfully attached to service
       fail: msg="{{ output.json.message }}"
