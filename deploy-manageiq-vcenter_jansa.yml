@@ -76,7 +76,6 @@
       set_stats:
         data:
           payload: 'Jansa release workaround 12/06/2020'
-          output.json.success : True
       when: release == 'jansa'
 
     # - debug: msg="payload = {{ payload }}"
