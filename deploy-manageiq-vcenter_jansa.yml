@@ -72,7 +72,7 @@
               - "{{ deployInfo.instance.hw_product_uuid }}"
       when: release != 'jansa'
 
-    - debug: msg="payload = {{ payload }}"
+    # - debug: msg="payload = {{ payload }}"
 
     - name: Step 8 - Register Vm with Cloudforms
       uri:
