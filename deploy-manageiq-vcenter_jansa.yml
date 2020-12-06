@@ -93,7 +93,7 @@
           Content-Type: "application/json"
         status_code: 200
       register: output
-      # when: release != 'jansa'
+      when: release != 'jansa'
 
     - debug: var=output.json.success
 
