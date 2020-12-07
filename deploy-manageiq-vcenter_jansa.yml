@@ -95,11 +95,11 @@
       register: output
       when: release != 'jansa'
 
-    - debug: var=output.json.success
+    # - debug: var=output.json.success
 
-    - name: Step 9 - Check if the VM was successfully attached to service
-      fail: msg="{{ output.json.message }}"
-      when: output.json.success == false
+    # - name: Step 9 - Check if the VM was successfully attached to service
+    #   fail: msg="{{ output.json.message }}"
+    #   when: output.json.success == false
 
 
 
