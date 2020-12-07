@@ -99,7 +99,7 @@
 
     - name: Step 9 - Check if the VM was successfully attached to service
       fail: msg="{{ output.json.message }}"
-      when: output.json.success == false and release != 'jansa'
+      when: output.json.success == false
 
 
 
