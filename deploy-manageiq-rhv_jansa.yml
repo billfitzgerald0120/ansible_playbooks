@@ -60,7 +60,6 @@
         vm: "{{ newvm }}"
         name: nic1
       register: IPInfo
-      when: release != 'jansa'
 
     - name: Step 7 - Starting EVM service manually
       shell: systemctl start evmserverd.service
