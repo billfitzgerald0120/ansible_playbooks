@@ -61,6 +61,7 @@
 
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
+
     - name: Step 7 - Build body for Cloudforms
       set_fact:
         payload:
