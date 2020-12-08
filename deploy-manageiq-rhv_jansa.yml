@@ -67,8 +67,8 @@
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
       when: release != 'jansa'
 
-    - debug: 
-        msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
+    # - debug: 
+    #    msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
 
     - name: Step 8 - Build body for Cloudforms
       set_fact:
