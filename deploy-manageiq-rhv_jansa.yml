@@ -52,7 +52,7 @@
         wait: yes
 
     - pause:
-        minutes: 5
+        minutes: 10
 
     - name: Step 6 - Gathering IP Info
       ovirt_nic:
