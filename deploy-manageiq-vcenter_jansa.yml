@@ -53,12 +53,12 @@
       setup:
       register: moreInfo
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: release != 'jansa' or release != 'kasparov'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk' 
 
     - name: Step 6 - ManageIQ - Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ deployInfo.instance.hw_eth0.ipaddresses[0] }}'
-      when: release != 'jansa' and release != 'kasparov'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
 
     - debug:
         msg: "You should now be able to access your appliance via https://{{ deployInfo.instance.hw_eth0.ipaddresses[0] }} Please allow roughly 15 minutes for the service to fully come online."
@@ -72,7 +72,7 @@
               href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
             uid_ems:
               - "{{ deployInfo.instance.hw_product_uuid }}"
-      when: release != 'jansa' and release != 'kasparov'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
 
     # - debug: msg="payload = {{ payload }}"
 
@@ -89,7 +89,7 @@
           Content-Type: "application/json"
         status_code: 200
       register: output
-      when: release != 'jansa' and release != 'kasparov'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
 
     # - debug: var=output.json.success
 
