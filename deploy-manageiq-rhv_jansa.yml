@@ -2,6 +2,9 @@
 - hosts: localhost
 
   tasks:
+          # Adding logic for release not equal jansa or kasparov .....    
+          # jansa or kasparov currently fails on step 5 because of issue with root user ....12/5/2020
+          # Adding release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk' 01/04/2021
     - name: Step 1 - Locating File
       find: 
         paths: "/builds/manageiq/{{ release }}/{{ version }}/"
@@ -64,7 +67,7 @@
     - name: Step 7 - Starting EVM service manually
       shell: systemctl start evmserverd.service
       delegate_to: '{{ IPInfo.nic.reported_devices[0].ips[0].address }}'
-      when: release != 'jansa'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
 
     # - debug: 
     #    msg: "You should now be able to access your appliance via https://{{ IPInfo.nic.reported_devices[0].ips[0].address }} Please allow roughly 15 minutes for the service to fully come online."
@@ -78,7 +81,7 @@
               href: "{{ manageiq.api_url }}/api/{{ provider_href_slug }}"
             uid_ems:
               - "{{ IPInfo.nic.vm.id }}"
-      when: release != 'jansa'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
     # - debug: msg="payload = {{ payload }}"
 
     - name: Step 9 - Register Vm with Cloudforms
@@ -94,7 +97,7 @@
           Content-Type: "application/json"
         status_code: 200
       register: output
-      when: release != 'jansa'
+      when: release == 'fine' or release == 'gaprindashvili' or release == 'hammer' or release == 'ivanchuk'
 
     # - debug: var=output.json.success
 
